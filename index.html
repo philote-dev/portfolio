@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio</title>
+    <title>philote_dev - Portfolio</title>
     <style>
         * {
             margin: 0;
@@ -11,347 +11,1118 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+        html {
+            scroll-behavior: smooth;
         }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #eceff4;
+            background: #2e3440;
+            overflow-x: hidden;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes scaleUp {
+            from { opacity: 0; transform: scale(0.9) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* HEADER + ABOUT COMBINED */
         header {
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 2rem;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            border-bottom: 4px solid #667eea;
+            background: linear-gradient(135deg, rgba(46, 52, 64, 0.95), rgba(59, 66, 82, 0.95));
+            border-bottom: 3px solid #b48ead;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(136, 192, 208, 0.02) 2px, rgba(136, 192, 208, 0.02) 4px),
+                        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(180, 142, 173, 0.02) 2px, rgba(180, 142, 173, 0.02) 4px);
+            pointer-events: none;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
         }
 
         header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #88c0d0, #b48ead);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInDown 0.8s ease-out;
+            font-weight: 700;
+            letter-spacing: -1px;
+            transition: all 0.3s ease;
         }
 
         header p {
-            font-size: 1.1rem;
-            color: #aaa;
+            font-size: 1.2rem;
+            color: #81a1c1;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+            font-weight: 300;
+            transition: all 0.3s ease;
         }
 
-        nav {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 1rem;
+        .about-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
-            position: sticky;
+            max-width: 900px;
+            width: 90%;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .about-content.active {
+            opacity: 1;
+        }
+
+        .about-content h2 {
+            color: #88c0d0;
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .about-content p {
+            font-size: 1.05rem;
+            color: #eceff4;
+            line-height: 1.9;
+            font-weight: 300;
+        }
+
+        header.scrolled h1,
+        header.scrolled p {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
             top: 0;
-            z-index: 100;
+            width: 100%;
+            background: rgba(46, 52, 64, 0.95);
+            padding: 1rem 2rem;
+            text-align: center;
+            z-index: 1000;
+            border-bottom: 2px solid #b48ead;
+            backdrop-filter: blur(10px);
         }
 
         nav a {
-            color: white;
+            color: #eceff4;
             text-decoration: none;
             margin: 0 1.5rem;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            font-size: 0.95rem;
         }
 
         nav a:hover {
-            color: #667eea;
+            color: #b48ead;
         }
 
-        main {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #b48ead, #88c0d0);
+            transition: width 0.3s ease;
         }
 
-        section {
-            background: white;
-            margin-bottom: 2rem;
-            padding: 2rem;
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* ABOUT SECTION */
+        .about-section {
+            padding: 5rem 2rem;
+            max-width: 900px;
+            margin: 3rem auto;
+            background: linear-gradient(135deg, #3b4252 0%, #434c5e 100%);
+            border-top: 3px solid #88c0d0;
+            border-bottom: 3px solid #b48ead;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            animation: slideIn 0.6s ease-out;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            animation: scaleUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .about-section h2 {
+            color: #88c0d0;
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #b48ead;
+            padding-bottom: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        section h2 {
-            color: #667eea;
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 0.5rem;
-        }
-
-        .about p {
-            margin-bottom: 1rem;
+        .about-section p {
             font-size: 1.05rem;
-        }
-
-        .project {
-            background: #f8f9fa;
-            padding: 1.5rem;
+            color: #eceff4;
+            line-height: 1.9;
             margin-bottom: 1.5rem;
-            border-left: 4px solid #667eea;
-            border-radius: 4px;
-            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: 300;
+            transition: all 0.3s ease;
         }
 
-        .project:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        .about-section p:hover {
+            color: #88c0d0;
+            transform: scale(1.01);
         }
 
-        .project h3 {
-            color: #667eea;
-            margin-bottom: 0.5rem;
+        /* FULLSCREEN VIZ */
+        .fullscreen-viz {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(59, 66, 82, 0.8), rgba(67, 76, 94, 0.8));
+            border-top: 1px solid rgba(136, 192, 208, 0.2);
+            border-bottom: 1px solid rgba(180, 142, 173, 0.2);
         }
 
-        .project p {
+        .fullscreen-viz canvas {
+            position: absolute !important;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .viz-content {
+            position: relative;
+            z-index: 10;
+            max-width: 1000px;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .viz-title {
+            color: #88c0d0;
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: slideInLeft 0.8s ease-out 0.2s forwards;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .viz-subtitle {
+            color: #81a1c1;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: slideInLeft 0.8s ease-out 0.3s forwards;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .viz-description {
+            color: #eceff4;
+            font-size: 1.05rem;
+            max-width: 600px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .edu-card {
+            position: absolute;
+            top: 60px;
+            left: 60px;
+            background: rgba(46, 52, 64, 0.95);
+            border: 1px solid rgba(136, 192, 208, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            max-width: 300px;
+            opacity: 0;
+            animation: slideInLeft 0.8s ease-out 0.6s forwards;
+            z-index: 15;
+            backdrop-filter: blur(10px);
+        }
+
+        .edu-card h3 {
+            color: #88c0d0;
+            font-size: 0.9rem;
             margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .edu-card p {
+            color: #81a1c1;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .viz-controls {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.8s forwards;
+            pointer-events: auto;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #88c0d0, #81a1c1);
+            color: #2e3440;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(136, 192, 208, 0.3);
+            font-size: 0.95rem;
+            pointer-events: auto;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #b48ead, #88c0d0);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(180, 142, 173, 0.4);
+        }
+
+        .quantum-info {
+            position: absolute;
+            bottom: 60px;
+            right: 60px;
+            background: rgba(46, 52, 64, 0.95);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 3px solid #b48ead;
+            color: #81a1c1;
+            font-size: 0.95rem;
+            opacity: 0;
+            animation: slideInRight 0.8s ease-out 0.5s forwards;
+            z-index: 20;
+            pointer-events: none;
+            font-family: 'Courier New', monospace;
+            border: 1px solid rgba(180, 142, 173, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        /* DIVIDER */
+        .section-divider {
+            height: 80px;
+            background: linear-gradient(135deg, #2e3440 0%, #3b4252 50%, #2e3440 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid rgba(136, 192, 208, 0.1);
+            border-bottom: 1px solid rgba(180, 142, 173, 0.1);
+        }
+
+        .divider-line {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #88c0d0, #b48ead, transparent);
+        }
+
+        /* PROJECTS */
+        .projects-section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(46, 52, 64, 0.5), rgba(59, 66, 82, 0.5));
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .projects-section h2 {
+            color: #88c0d0;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            border-bottom: 2px solid #b48ead;
+            padding-bottom: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, #3b4252, #434c5e);
+            border: 1px solid rgba(136, 192, 208, 0.15);
+            border-radius: 12px;
+            overflow: hidden;
+            animation: scaleUp 0.8s ease-out;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .project-card:nth-child(1) { animation-delay: 0.1s; }
+        .project-card:nth-child(2) { animation-delay: 0.2s; }
+        .project-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #2e3440, #3b4252);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .project-content {
+            padding: 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card h3 {
+            color: #88c0d0;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .project-card p {
+            color: #eceff4;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            line-height: 1.7;
+            font-weight: 300;
+            flex-grow: 1;
         }
 
         .tech-stack {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
+            gap: 0.6rem;
+            margin-top: auto;
         }
 
         .tech-tag {
-            background: #667eea;
-            color: white;
-            padding: 0.4rem 0.8rem;
+            background: rgba(136, 192, 208, 0.15);
+            color: #88c0d0;
+            padding: 0.4rem 0.9rem;
             border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(136, 192, 208, 0.3);
+            transition: all 0.3s ease;
         }
 
-        .skills {
+        .tech-tag:hover {
+            background: rgba(136, 192, 208, 0.3);
+            transform: scale(1.05);
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(136, 192, 208, 0.4);
+            box-shadow: 0 16px 40px rgba(136, 192, 208, 0.15);
+        }
+
+        /* SKILLS */
+        .skills-section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .skills-section h2 {
+            color: #88c0d0;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            border-bottom: 2px solid #b48ead;
+            padding-bottom: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
         }
 
-        .skill-category h3 {
-            color: #667eea;
-            margin-bottom: 0.5rem;
+        .skill-box {
+            background: linear-gradient(135deg, #3b4252, #434c5e);
+            border: 1px solid rgba(180, 142, 173, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            animation: scaleUp 0.8s ease-out;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
 
-        .skill-category ul {
+        .skill-box:nth-child(1) { animation-delay: 0.1s; }
+        .skill-box:nth-child(2) { animation-delay: 0.2s; }
+        .skill-box:nth-child(3) { animation-delay: 0.3s; }
+        .skill-box:nth-child(4) { animation-delay: 0.4s; }
+
+        .skill-box:hover {
+            border-color: rgba(136, 192, 208, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(136, 192, 208, 0.15);
+        }
+
+        .skill-box h3 {
+            color: #88c0d0;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .skill-box ul {
             list-style: none;
         }
 
-        .skill-category li {
-            padding: 0.3rem 0;
-            color: #555;
+        .skill-box li {
+            color: #eceff4;
+            padding: 0.6rem 0;
+            font-size: 0.95rem;
+            font-weight: 300;
+            transition: all 0.3s ease;
         }
 
-        .skill-category li:before {
+        .skill-box li:before {
             content: "▸ ";
-            color: #667eea;
-            font-weight: bold;
-            margin-right: 0.5rem;
+            color: #b48ead;
+            font-weight: 600;
+            margin-right: 0.7rem;
+        }
+
+        .skill-box li:hover {
+            color: #88c0d0;
+            padding-left: 10px;
+        }
+
+        /* CONTACT */
+        .contact-section {
+            padding: 6rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+            animation: zoomIn 0.8s ease-out;
+            background: linear-gradient(135deg, rgba(59, 66, 82, 0.5), rgba(67, 76, 94, 0.5));
+        }
+
+        .contact-section h2 {
+            color: #88c0d0;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #b48ead;
+            padding-bottom: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-section p {
+            color: #eceff4;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
         }
 
         .contact-links {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .contact-links a {
             display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
+            background: linear-gradient(135deg, #88c0d0, #81a1c1);
+            color: #2e3440;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
             text-decoration: none;
-            transition: background 0.3s, transform 0.3s;
-            font-weight: 500;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(136, 192, 208, 0.3);
+            font-size: 1rem;
         }
 
         .contact-links a:hover {
-            background: #764ba2;
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #b48ead, #88c0d0);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(180, 142, 173, 0.4);
         }
 
+        /* FOOTER */
         footer {
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
+            background: #2e3440;
+            color: #81a1c1;
             text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
+            padding: 2rem;
+            border-top: 2px solid #b48ead;
+            font-size: 0.9rem;
+            font-weight: 300;
         }
 
-        @media (max-width: 600px) {
-            header h1 {
-                font-size: 1.8rem;
-            }
-
-            nav a {
-                display: block;
-                margin: 0.5rem 0;
-            }
-
-            main {
-                margin: 1rem auto;
-            }
-
-            section {
-                padding: 1.5rem;
-            }
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.5rem; }
+            .viz-title { font-size: 2rem; }
+            nav a { margin: 0 0.8rem; font-size: 0.85rem; }
+            .edu-card { display: none; }
+            .quantum-info { top: 80px; right: 20px; bottom: auto; left: auto; }
+            .projects-grid, .skills-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Your Name</h1>
-        <p>Software Developer | Simulator Builder | Problem Solver</p>
-    </header>
-
     <nav>
-        <a href="#about">About</a>
+        <a href="#home">Home</a>
+        <a href="#home">About</a>
+        <a href="#neural">Neural</a>
+        <a href="#quantum">Quantum</a>
         <a href="#projects">Projects</a>
         <a href="#skills">Skills</a>
         <a href="#contact">Contact</a>
     </nav>
 
-    <main>
-        <section id="about" class="about">
+    <header id="home">
+        <div class="header-content">
+            <h1>Your Name</h1>
+            <p>AI & Quantum Developer | Interactive Systems Engineer</p>
+        </div>
+        <div class="about-content" id="aboutContent">
             <h2>About Me</h2>
-            <p>
-                I'm a passionate developer with a strong interest in building simulators and solving complex problems. 
-                I love working on projects that involve systems design, algorithm optimization, and creating tools that 
-                make a real impact.
-            </p>
-            <p>
-                Currently seeking internship opportunities to apply my skills in a professional environment and continue 
-                growing as an engineer.
-            </p>
-        </section>
+            <p>I'm a passionate developer specializing in building interactive systems that bridge complex mathematics with intuitive visualization. My work focuses on quantum computing, neural network visualization, and creating tools that make abstract concepts tangible. I'm driven by the intersection of physics, mathematics, and software engineering.</p>
+        </div>
+    </header>
 
-        <section id="projects">
-            <h2>Projects</h2>
+    <div class="fullscreen-viz" id="neural">
+        <canvas id="neuralCanvas"></canvas>
+        <div class="edu-card">
+            <h3>Information Flow</h3>
+            <p>Neurons activate based on proximity. Data propagates through layers via weighted connections.</p>
+        </div>
+        <div class="viz-content">
+            <div class="viz-subtitle">Interactive Visualization</div>
+            <h2 class="viz-title">Neural Network Dynamics</h2>
+            <p class="viz-description">Particle-driven data flows through connected layers. Hover to activate neurons, click and drag to inject pulses.</p>
+        </div>
+    </div>
 
-            <div class="project">
-                <h3>Project Name 1</h3>
-                <p>
-                    <strong>Description:</strong> Brief description of what this simulator or project does. Explain the core functionality 
-                    and what problem it solves or what it demonstrates.
-                </p>
-                <p>
-                    <strong>Key Features:</strong> Feature 1, Feature 2, Feature 3
-                </p>
-                <p>
-                    <strong>What I Learned:</strong> The main technical challenges you overcame and lessons learned.
-                </p>
-                <div class="tech-stack">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">NumPy</span>
-                    <span class="tech-tag">Visualization</span>
+    <div class="fullscreen-viz" id="quantum">
+        <canvas id="quantumCanvas"></canvas>
+        <div class="edu-card">
+            <h3>Quantum Superposition</h3>
+            <p>States exist in superposition until measured. Apply unitary gates to rotate the state in Hilbert space.</p>
+        </div>
+        <div class="viz-content">
+            <div class="viz-subtitle">Quantum Computing</div>
+            <h2 class="viz-title">Bloch Sphere Simulator</h2>
+            <p class="viz-description">Explore quantum state evolution. Apply gates to manipulate superposition and observe probability amplitudes transform.</p>
+        </div>
+        <div class="quantum-info" id="quantumInfo">
+            |ψ⟩ = 1.00|0⟩ + 0.00|1⟩
+        </div>
+        <div class="viz-controls">
+            <button class="btn" onclick="applyHadamard()">Hadamard</button>
+            <button class="btn" onclick="applyPauliX()">Pauli-X</button>
+            <button class="btn" onclick="applyPhase()">Phase</button>
+            <button class="btn" onclick="resetQuantum()">Reset</button>
+        </div>
+    </div>
+
+    <div class="section-divider">
+        <div class="divider-line"></div>
+    </div>
+
+    <section class="projects-section" id="projects">
+        <h2>Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="https://via.placeholder.com/340x200/2e3440/88c0d0?text=Project+1" alt="Project 1">
+                </div>
+                <div class="project-content">
+                    <h3>AI Simulator</h3>
+                    <p>High-performance particle system simulating agent behavior using reinforcement learning with real-time visualization.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">NumPy</span>
+                        <span class="tech-tag">Canvas</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="project">
-                <h3>Project Name 2</h3>
-                <p>
-                    <strong>Description:</strong> Description of another project you're proud of. What makes it interesting? 
-                    What was the scope and complexity?
-                </p>
-                <p>
-                    <strong>Key Features:</strong> Feature 1, Feature 2, Feature 3
-                </p>
-                <p>
-                    <strong>What I Learned:</strong> Main takeaways and technical insights from building this.
-                </p>
-                <div class="tech-stack">
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">WebGL</span>
-                    <span class="tech-tag">Physics</span>
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="https://via.placeholder.com/340x200/2e3440/b48ead?text=Project+2" alt="Project 2">
+                </div>
+                <div class="project-content">
+                    <h3>Quantum Simulator</h3>
+                    <p>Multi-qubit quantum state evolution simulator with gate decomposition and tomography visualization.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">WebGL</span>
+                        <span class="tech-tag">Math</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="project">
-                <h3>Project Name 3</h3>
-                <p>
-                    <strong>Description:</strong> A third project demonstrating different skills. Vary the technologies 
-                    and problem domains to show versatility.
-                </p>
-                <p>
-                    <strong>Key Features:</strong> Feature 1, Feature 2, Feature 3
-                </p>
-                <p>
-                    <strong>What I Learned:</strong> What made this project challenging and what you gained from it.
-                </p>
-                <div class="tech-stack">
-                    <span class="tech-tag">C++</span>
-                    <span class="tech-tag">Algorithm Design</span>
-                    <span class="tech-tag">Performance</span>
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="https://via.placeholder.com/340x200/2e3440/81a1c1?text=Project+3" alt="Project 3">
+                </div>
+                <div class="project-content">
+                    <h3>Physics Engine</h3>
+                    <p>Real-time 2D physics simulation with collision detection, forces, and constraint systems.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">C++</span>
+                        <span class="tech-tag">Algorithms</span>
+                        <span class="tech-tag">Optimization</span>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="skills">
-            <h2>Skills</h2>
-            <div class="skills">
-                <div class="skill-category">
-                    <h3>Languages</h3>
-                    <ul>
-                        <li>Python</li>
-                        <li>JavaScript</li>
-                        <li>C++</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Tools & Libraries</h3>
-                    <ul>
-                        <li>Git/GitHub</li>
-                        <li>NumPy/Pandas</li>
-                        <li>React</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Domains</h3>
-                    <ul>
-                        <li>Simulation</li>
-                        <li>Algorithm Design</li>
-                        <li>Data Structures</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Soft Skills</h3>
-                    <ul>
-                        <li>Problem Solving</li>
-                        <li>Communication</li>
-                        <li>Collaboration</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+    <div class="section-divider">
+        <div class="divider-line"></div>
+    </div>
 
-        <section id="contact">
-            <h2>Get In Touch</h2>
-            <p>I'm always interested in discussing new projects and opportunities. Feel free to reach out!</p>
-            <div class="contact-links">
-                <a href="mailto:your.email@example.com">Email Me</a>
-                <a href="https://github.com" target="_blank">GitHub</a>
-                <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+    <section class="skills-section" id="skills">
+        <h2>Technical Stack</h2>
+        <div class="skills-grid">
+            <div class="skill-box">
+                <h3>Languages</h3>
+                <ul>
+                    <li>Python</li>
+                    <li>JavaScript</li>
+                    <li>C++</li>
+                    <li>GLSL</li>
+                </ul>
             </div>
-        </section>
-    </main>
+            <div class="skill-box">
+                <h3>Frameworks</h3>
+                <ul>
+                    <li>NumPy / Pandas</li>
+                    <li>React</li>
+                    <li>Three.js / WebGL</li>
+                    <li>Canvas API</li>
+                </ul>
+            </div>
+            <div class="skill-box">
+                <h3>Specializations</h3>
+                <ul>
+                    <li>Quantum Computing</li>
+                    <li>Data Visualization</li>
+                    <li>Algorithm Design</li>
+                    <li>Physics Simulation</li>
+                </ul>
+            </div>
+            <div class="skill-box">
+                <h3>Tools</h3>
+                <ul>
+                    <li>Git / GitHub</li>
+                    <li>Performance Optimization</li>
+                    <li>Real-time Rendering</li>
+                    <li>API Design</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider">
+        <div class="divider-line"></div>
+    </div>
+
+    <section class="contact-section" id="contact">
+        <h2>Let's Connect</h2>
+        <p>Interested in discussing projects or opportunities? Reach out—I'd love to talk.</p>
+        <div class="contact-links">
+            <a href="mailto:your.email@example.com">Email</a>
+            <a href="https://github.com/philote_dev" target="_blank">GitHub</a>
+            <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+        </div>
+    </section>
 
     <footer>
-        <p>&copy; 2025 Your Name. All rights reserved.</p>
+        <p>&copy; 2025 philote_dev. Built with passion for AI and quantum computing.</p>
     </footer>
+
+    <script>
+        function observeElement(selector, callback, threshold = 0.2) {
+            const element = document.querySelector(selector);
+            if (!element) return;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        callback();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold });
+            observer.observe(element);
+        }
+
+        let neuralAnimating = false;
+        observeElement('#neural', () => {
+            if (neuralAnimating) return;
+            neuralAnimating = true;
+            initNeural();
+        }, 0.3);
+
+        function initNeural() {
+            const canvas = document.getElementById('neuralCanvas');
+            const ctx = canvas.getContext('2d');
+            function resizeCanvas() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const layers = [4, 6, 6, 4];
+            const neurons = [];
+            let mouseX = canvas.width / 2;
+            let mouseY = canvas.height / 2;
+            let time = 0;
+
+            for (let l = 0; l < layers.length; l++) {
+                neurons[l] = [];
+                for (let n = 0; n < layers[l]; n++) {
+                    const x = (l + 1) * (canvas.width / (layers.length + 1));
+                    const y = (n + 1) * (canvas.height / (layers[l] + 1));
+                    neurons[l][n] = { x, y, activation: 0, phase: Math.random() * Math.PI * 2 };
+                }
+            }
+
+            canvas.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouseX = e.clientX - rect.left;
+                mouseY = e.clientY - rect.top;
+            });
+
+            function animate() {
+                ctx.fillStyle = 'rgba(46, 52, 64, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                time += 0.02;
+
+                for (let l = 0; l < layers.length; l++) {
+                    for (let n = 0; n < layers[l]; n++) {
+                        const neuron = neurons[l][n];
+                        const dx = neuron.x - mouseX;
+                        const dy = neuron.y - mouseY;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        const targetActivation = Math.max(0, 1 - dist / 250);
+                        neuron.activation += (targetActivation - neuron.activation) * 0.12;
+                        const wave = Math.sin(time + neuron.phase) * 0.3;
+                        const finalActivation = Math.max(0, neuron.activation + wave * 0.2);
+                        const size = 3 + finalActivation * 8;
+                        const hue = 180 + finalActivation * 80;
+
+                        const gradient = ctx.createRadialGradient(neuron.x, neuron.y, 0, neuron.x, neuron.y, size * 3);
+                        gradient.addColorStop(0, `hsla(${hue}, 100%, 60%, ${finalActivation * 0.5})`);
+                        gradient.addColorStop(1, `hsla(${hue}, 100%, 60%, 0)`);
+                        ctx.fillStyle = gradient;
+                        ctx.beginPath();
+                        ctx.arc(neuron.x, neuron.y, size * 3, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        ctx.fillStyle = `hsl(${hue}, 100%, 55%)`;
+                        ctx.beginPath();
+                        ctx.arc(neuron.x, neuron.y, size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+
+                for (let l = 0; l < layers.length - 1; l++) {
+                    for (let n1 = 0; n1 < layers[l]; n1++) {
+                        for (let n2 = 0; n2 < layers[l + 1]; n2++) {
+                            const neuron1 = neurons[l][n1];
+                            const neuron2 = neurons[l + 1][n2];
+                            const strength = (neuron1.activation + neuron2.activation) * 0.5;
+                            const gradient = ctx.createLinearGradient(neuron1.x, neuron1.y, neuron2.x, neuron2.y);
+                            const hue = 180 + strength * 60;
+                            gradient.addColorStop(0, `hsla(${hue}, 100%, 50%, 0)`);
+                            gradient.addColorStop(0.5, `hsla(${hue}, 100%, 50%, ${strength * 0.6})`);
+                            gradient.addColorStop(1, `hsla(${hue}, 100%, 50%, 0)`);
+                            ctx.strokeStyle = gradient;
+                            ctx.lineWidth = 1 + strength * 3;
+                            ctx.lineCap = 'round';
+                            ctx.beginPath();
+                            ctx.moveTo(neuron1.x, neuron1.y);
+                            ctx.lineTo(neuron2.x, neuron2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        let quantumAnimating = false;
+        let quantumState = { real0: 1, imag0: 0, real1: 0, imag1: 0 };
+        let quantumTime = 0;
+
+        observeElement('#quantum', () => {
+            if (quantumAnimating) return;
+            quantumAnimating = true;
+            initQuantum();
+        }, 0.3);
+
+        function initQuantum() {
+            const canvas = document.getElementById('quantumCanvas');
+            const ctx = canvas.getContext('2d');
+            function resizeCanvas() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+            resizeCanvas();
+
+            function animate() {
+                ctx.fillStyle = 'rgba(46, 52, 64, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                quantumTime += 0.02;
+
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const radius = Math.min(canvas.width, canvas.height) * 0.2;
+
+                const prob0 = quantumState.real0 ** 2 + quantumState.imag0 ** 2;
+                const prob1 = quantumState.real1 ** 2 + quantumState.imag1 ** 2;
+
+                for (let i = 0; i < 3; i++) {
+                    const orbitRadius = radius * (0.5 + i * 0.25);
+                    ctx.strokeStyle = `rgba(136, 192, 208, ${0.3 - i * 0.08})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, orbitRadius, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+
+                const angle0 = Math.atan2(quantumState.imag0, quantumState.real0);
+                const angle1 = Math.atan2(quantumState.imag1, quantumState.real1);
+
+                drawCloud(ctx, centerX, centerY, angle0, prob0, '#88c0d0', radius);
+                drawCloud(ctx, centerX, centerY, angle1, prob1, '#b48ead', radius);
+
+                const waveHeight = Math.sin(quantumTime) * 20;
+                ctx.strokeStyle = 'rgba(180, 142, 173, 0.4)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(centerX - radius, centerY);
+                for (let x = -radius; x <= radius; x += 5) {
+                    const y = centerY + Math.sin((x / radius) * Math.PI + quantumTime) * waveHeight;
+                    ctx.lineTo(centerX + x, y);
+                }
+                ctx.stroke();
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        function drawCloud(ctx, centerX, centerY, angle, probability, color, radius) {
+            const x = centerX + Math.cos(angle) * radius * Math.sqrt(probability);
+            const y = centerY + Math.sin(angle) * radius * Math.sqrt(probability);
+            const pulse = Math.sin(quantumTime * 2) * 0.3 + 0.7;
+            const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius * 0.4 * pulse);
+            const rgbColor = color === '#88c0d0' ? '136, 192, 208' : '180, 142, 173';
+            gradient.addColorStop(0, `rgba(${rgbColor}, ${probability * 0.8})`);
+            gradient.addColorStop(1, `rgba(${rgbColor}, 0)`);
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(x, y, radius * 0.4 * pulse, 0, Math.PI * 2);
+            ctx.fill();
+
+            const particles = 8;
+            for (let i = 0; i < particles; i++) {
+                const particleAngle = (i / particles) * Math.PI * 2 + quantumTime;
+                const particleX = x + Math.cos(particleAngle) * radius * 0.3 * probability;
+                const particleY = y + Math.sin(particleAngle) * radius * 0.3 * probability;
+                ctx.fillStyle = color;
+                ctx.globalAlpha = probability * 0.6;
+                ctx.beginPath();
+                ctx.arc(particleX, particleY, 2 * probability, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        function updateQuantumInfo() {
+            const prob0 = quantumState.real0 ** 2 + quantumState.imag0 ** 2;
+            const prob1 = quantumState.real1 ** 2 + quantumState.imag1 ** 2;
+            document.getElementById('quantumInfo').innerHTML = `|ψ⟩ = ${prob0.toFixed(2)}|0⟩ + ${prob1.toFixed(2)}|1⟩`;
+        }
+
+        function applyHadamard() {
+            const sqrt2 = Math.sqrt(2) / 2;
+            const newReal0 = sqrt2 * (quantumState.real0 + quantumState.real1);
+            const newImag0 = sqrt2 * (quantumState.imag0 + quantumState.imag1);
+            const newReal1 = sqrt2 * (quantumState.real0 - quantumState.real1);
+            const newImag1 = sqrt2 * (quantumState.imag0 - quantumState.imag1);
+            quantumState = { real0: newReal0, imag0: newImag0, real1: newReal1, imag1: newImag1 };
+            updateQuantumInfo();
+        }
+
+        function applyPauliX() {
+            const temp0 = quantumState.real0;
+            const temp0i = quantumState.imag0;
+            quantumState.real0 = quantumState.real1;
+            quantumState.imag0 = quantumState.imag1;
+            quantumState.real1 = temp0;
+            quantumState.imag1 = temp0i;
+            updateQuantumInfo();
+        }
+
+        function applyPhase() {
+            quantumState.real1 *= -1;
+            quantumState.imag1 *= -1;
+            updateQuantumInfo();
+        }
+
+        function resetQuantum() {
+            quantumState = { real0: 1, imag0: 0, real1: 0, imag1: 0 };
+            updateQuantumInfo();
+        }
+
+        // SCROLL TRANSITION EFFECT
+        const header = document.querySelector('header');
+        const aboutContent = document.getElementById('aboutContent');
+        let isTransitioning = false;
+
+        window.addEventListener('scroll', () => {
+            const scrollPercentage = window.scrollY / window.innerHeight;
+            const headerElement = document.querySelector('.header-content');
+            
+            if (scrollPercentage < 0.5) {
+                // Show name, hide about
+                isTransitioning = false;
+                headerElement.style.opacity = 1 - scrollPercentage * 2;
+                headerElement.style.transform = `scale(${1 - scrollPercentage * 0.2})`;
+                aboutContent.classList.remove('active');
+                aboutContent.style.opacity = 0;
+                header.classList.remove('scrolled');
+            } else if (scrollPercentage < 1) {
+                // Transition zone - fade from name to about
+                isTransitioning = true;
+                const transitionProgress = (scrollPercentage - 0.5) * 2;
+                headerElement.style.opacity = Math.max(0, 1 - transitionProgress);
+                headerElement.style.transform = `scale(${0.8 - transitionProgress * 0.2})`;
+                aboutContent.style.opacity = transitionProgress;
+                aboutContent.classList.add('active');
+                header.classList.add('scrolled');
+            } else {
+                // Past header - keep about visible but locked
+                isTransitioning = false;
+                headerElement.style.opacity = 0;
+                aboutContent.style.opacity = 1;
+                aboutContent.classList.add('active');
+                header.classList.add('scrolled');
+            }
+        });
+
+        // Lock scroll during transition
+        window.addEventListener('wheel', (e) => {
+            const scrollPercentage = window.scrollY / window.innerHeight;
+            if (scrollPercentage >= 0.5 && scrollPercentage < 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Also handle keyboard scroll
+        window.addEventListener('keydown', (e) => {
+            const scrollPercentage = window.scrollY / window.innerHeight;
+            if (scrollPercentage >= 0.5 && scrollPercentage < 1) {
+                if (['ArrowDown', 'ArrowUp', ' ', 'PageDown', 'PageUp'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            }
+        }, { passive: false });
+    </script>
 </body>
 </html>
