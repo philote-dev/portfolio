@@ -447,7 +447,8 @@ nav a:hover::after {
 
 .project-image {
     width: 100%;
-    height: 200px;
+    height: auto;                     /* ← Change from 200px */
+    min-height: 200px;                /* ← Add this for minimum */
     background: linear-gradient(135deg, #2e3440, #3b4252);
     display: flex;
     align-items: center;
@@ -458,8 +459,8 @@ nav a:hover::after {
 
 .project-image img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;                     /* ← Change from 100% */
+    object-fit: contain;
     transition: transform 0.3s ease;
 }
 
