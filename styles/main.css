@@ -322,23 +322,18 @@ nav a:hover::after {
     pointer-events: none;
 }
 
-.viz-panel[data-viz="neural"] .viz-content {
-    position: absolute;
-    top: 50%;
-    left: 5%;
-    transform: translateY(-50%);
-    width: 100%;
-    max-width: 1000px;
-    padding: 0 2rem;
-}
-
+/* All viz-content (heading with description) positioned at top left */
+.viz-panel[data-viz="neural"] .viz-content,
 .viz-panel[data-viz="quantum"] .viz-content,
 .viz-panel[data-viz="gojo"] .viz-content {
     position: absolute;
-    top: 260px;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-top: 0;
+    top: 60px;
+    left: 60px;
+    transform: none;
+    width: auto;
+    max-width: 600px;
+    padding: 0;
+    margin: 0;
 }
 
 /* Navigation Arrows */
@@ -412,17 +407,19 @@ nav a:hover::after {
 .viz-description {
     color: #eceff4;
     font-size: 1.05rem;
-    max-width: 600px;
+    max-width: 500px;
     opacity: 0;
     animation: fadeInUp 0.8s ease-out 0.4s forwards;
     line-height: 1.8;
     font-weight: 300;
 }
 
+/* All edu-card (info box) positioned at bottom left */
 .edu-card {
     position: absolute;
-    top: 60px;
+    bottom: 60px;
     left: 60px;
+    top: auto;
     background: rgba(46, 52, 64, 0.95);
     border: 1px solid rgba(136, 192, 208, 0.2);
     border-radius: 8px;
@@ -471,17 +468,34 @@ nav a:hover::after {
     right: 60px;
     z-index: 20;
     display: flex;
-    gap: 0.6rem;
-    flex-direction: column;
+    gap: 0.8rem;
+    flex-direction: row;
     opacity: 0;
     animation: fadeInUp 0.8s ease-out 0.8s forwards;
     pointer-events: auto;
 }
 
-.gojo-controls .btn {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.85rem;
-    min-width: 120px;
+.gojo-arrow {
+    background: none;
+    border: none;
+    color: #b48ead;
+    font-size: 1.8rem;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    line-height: 1;
+    width: auto;
+    min-width: auto;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.gojo-arrow:hover {
+    color: #a093a0;
+    transform: scale(1.2);
+}
+
+.gojo-arrow:active {
+    transform: scale(0.9);
 }
 
 .btn {
@@ -586,8 +600,8 @@ nav a:hover::after {
 
 .project-image {
     width: 100%;
-    height: auto;                     /* ← Change from 200px */
-    min-height: 200px;                /* ← Add this for minimum */
+    height: auto;
+    min-height: 140px;                /* Image height - EDIT THIS to adjust image height */
     background: linear-gradient(135deg, #2e3440, #3b4252);
     display: flex;
     align-items: center;
@@ -608,7 +622,7 @@ nav a:hover::after {
 }
 
 .project-content {
-    padding: 2rem;
+    padding: 1rem;                     /* Reduced from 2rem - EDIT THIS to adjust content padding */
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -616,16 +630,16 @@ nav a:hover::after {
 
 .project-card h3 {
     color: #88c0d0;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    font-size: 1.3rem;                 /* Reduced from 1.5rem */
+    margin-bottom: 0.6rem;             /* Reduced from 0.8rem */
     font-weight: 600;
 }
 
 .project-card p {
     color: #eceff4;
-    font-size: 0.95rem;
-    margin-bottom: 1rem;
-    line-height: 1.7;
+    font-size: 0.9rem;                /* Reduced from 0.95rem */
+    margin-bottom: 0.6rem;             /* Reduced from 0.8rem */
+    line-height: 1.5;                  /* Reduced from 1.6 */
     font-weight: 300;
     flex-grow: 1;
 }
@@ -633,16 +647,17 @@ nav a:hover::after {
 .tech-stack {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.6rem;
+    gap: 0.5rem;                       /* Reduced from 0.6rem */
     margin-top: auto;
+    margin-bottom: 0;                 /* Ensure no extra bottom margin */
 }
 
 .tech-tag {
     background: rgba(136, 192, 208, 0.15);
     color: #88c0d0;
-    padding: 0.4rem 0.9rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;           /* Reduced from 0.4rem 0.9rem - EDIT THIS to adjust tag size */
+    border-radius: 16px;               /* Reduced from 20px */
+    font-size: 0.75rem;               /* Reduced from 0.8rem - EDIT THIS to adjust tag text size */
     font-weight: 600;
     border: 1px solid rgba(136, 192, 208, 0.3);
     transition: all 0.3s ease;
@@ -671,39 +686,39 @@ nav a:hover::after {
 .show-more-container {
     display: flex;
     justify-content: center;
-    margin-top: 3rem;
-    padding: 2rem 0;
+    margin-top: 2rem;
+    padding: 1rem 0;
 }
 
 .show-more-btn {
-    background: linear-gradient(135deg, #3b4252, #434c5e);
-    border: 2px solid rgba(136, 192, 208, 0.3);
-    border-radius: 50px;
+    background: rgba(46, 52, 64, 0.6);
+    border: 1px solid rgba(136, 192, 208, 0.2);
+    border-radius: 50%;
     color: #88c0d0;
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding: 1rem 2.5rem;
+    width: 50px;
+    height: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 0.8rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
 }
 
 .show-more-btn:hover {
-    background: linear-gradient(135deg, #434c5e, #4c566a);
-    border-color: rgba(136, 192, 208, 0.5);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(136, 192, 208, 0.2);
+    background: rgba(67, 76, 94, 0.8);
+    border-color: rgba(136, 192, 208, 0.4);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(136, 192, 208, 0.2);
 }
 
 .show-more-btn:active {
-    transform: translateY(-1px);
+    transform: scale(0.95);
 }
 
 .plus-icon {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 300;
     transition: transform 0.3s ease;
     line-height: 1;
@@ -1061,8 +1076,20 @@ footer {
 	max-width: 200px;
     }
     
-    .viz-panel[data-viz="quantum"] .viz-content { 
-	top: 200px;
+    /* Keep viz-content at top left on mobile */
+    .viz-panel[data-viz="neural"] .viz-content,
+    .viz-panel[data-viz="quantum"] .viz-content,
+    .viz-panel[data-viz="gojo"] .viz-content {
+	top: 20px;
+	left: 20px;
+	max-width: calc(100% - 40px);
+    }
+    
+    /* Keep edu-card at bottom left on mobile */
+    .edu-card {
+	bottom: 20px;
+	left: 20px;
+	max-width: calc(100% - 40px);
     }
     
     .nav-arrow {

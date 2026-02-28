@@ -11,8 +11,7 @@
     <nav>
         <a href="#home">Home</a>
         <a href="#home">About</a>
-        <a href="#neural">Neural</a>
-        <a href="#quantum">Quantum</a>
+        <a href="#unified-viz">Visualizations</a>
         <a href="#projects">Projects</a>
         <a href="#skills">Skills</a>
         <a href="#contact">Contact</a>
@@ -99,8 +98,8 @@
                 Limitless: Infinity
             </div>
             <div class="gojo-controls">
-                <button class="btn" onclick="switchGojoTechnique(-1)">← Previous</button>
-                <button class="btn" onclick="switchGojoTechnique(1)">Next →</button>
+                <button class="gojo-arrow" onclick="switchGojoTechnique(-1)">‹</button>
+                <button class="gojo-arrow" onclick="switchGojoTechnique(1)">›</button>
             </div>
         </div>
     </div>
@@ -117,13 +116,11 @@
                         <img src="images/projects/iquhack.png" alt="iQuHack 2026">
                     </div>
                     <div class="project-content">
-                        <h3>iQuHack 2026 — Quantum Rings Challenge</h3>
+                        <h3>iQuHack - Quantum Rings Challenge</h3>
                         <p>Quantum circuit difficulty and runtime prediction using static QASM features. Built 2-qubit interaction graphs and 
                             compound structural metrics to model entanglement progression.</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Python</span>
-                            <span class="tech-tag">PyTorch</span>
-                            <span class="tech-tag">Graph Analysis</span>
                             <span class="tech-tag">QASM</span>
                             <span class="tech-tag">Scikit-learn</span>
                         </div>
@@ -142,7 +139,6 @@
                             <span class="tech-tag">Python</span>
                             <span class="tech-tag">RL</span>
                             <span class="tech-tag">PDDL</span>
-                            <span class="tech-tag">GridWorld</span>
                         </div>
                     </div>
                 </div>
@@ -152,14 +148,12 @@
                         <img src="images/projects/ri3d.png" alt="FRCxMIT Ri3D">
                     </div>
                     <div class="project-content">
-                        <h3>FRCxMIT Ri3D 2026</h3>
+                        <h3>FRCxMIT Ri3D</h3>
                         <p>72-hour rapid robotics prototyping challenge. Designed and programmed fully functional FIRST Robotics robot 
                             with autonomous architecture, vision integration, and real-time control systems.</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Java</span>
                             <span class="tech-tag">WPILib</span>
-                            <span class="tech-tag">FRC Control Systems</span>
-                            <span class="tech-tag">Real-Time Robotics</span>
                         </div>
                     </div>
                 </div>
@@ -174,10 +168,8 @@
                             lyrics generation to audio synthesis using Claude API and Suno Bark TTS.</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Python</span>
-                            <span class="tech-tag">Claude Sonnet API</span>
                             <span class="tech-tag">Suno Bark</span>
                             <span class="tech-tag">librosa</span>
-                            <span class="tech-tag">Audio DSP</span>
                         </div>
                     </div>
                 </div>
@@ -193,8 +185,7 @@
                         <div class="tech-stack">
                             <span class="tech-tag">Computer Vision</span>
                             <span class="tech-tag">LLMs</span>
-                            <span class="tech-tag">Mesh Processing</span>
-                            <span class="tech-tag">AI@MIT</span>
+                            <span class="tech-tag">Meshes</span>
                         </div>
                     </div>
                 </div>
@@ -211,7 +202,6 @@
                             <span class="tech-tag">Python</span>
                             <span class="tech-tag">Arduino</span>
                             <span class="tech-tag">3D Printing</span>
-                            <span class="tech-tag">Algorithms</span>
                         </div>
                     </div>
                 </div>
@@ -226,7 +216,6 @@
                             and robot state machine architecture.</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Java</span>
-                            <span class="tech-tag">Json</span>
                             <span class="tech-tag">AdvantageScope</span>
                         </div>
                     </div>
@@ -242,7 +231,6 @@
                             path planning, AI object detection integration</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Java</span>
-                            <span class="tech-tag">Python</span>
                             <span class="tech-tag">OAK-D Pro</span>
                             <span class="tech-tag">PathPlanner</span>
                             <span class="tech-tag">CV</span>
@@ -261,16 +249,13 @@
                         <div class="tech-stack">
                             <span class="tech-tag">Web Dev</span>
                             <span class="tech-tag">Education</span>
-                            <span class="tech-tag">Leadership</span>
-                            <span class="tech-tag">Nonprofit</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="show-more-container">
-                <button class="show-more-btn" onclick="toggleMoreProjects()" id="showMoreBtn">
+                <button class="show-more-btn" onclick="toggleMoreProjects()" id="showMoreBtn" aria-label="Show more projects">
                     <span class="plus-icon">+</span>
-                    <span class="btn-text" id="btnText">Show More Projects</span>
                 </button>
             </div>
     </section>

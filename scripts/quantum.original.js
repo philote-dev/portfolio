@@ -1,9 +1,14 @@
-// ORIGINAL QUANTUM BLOCH SPHERE ANIMATION
+// ORIGINAL QUANTUM BLOCH SPHERE ANIMATION - BACKUP
 // This is the simpler version before immersive 3D enhancements
+// To restore: copy this file to quantum.js
 
 window.quantumAnimating = false;
 window.quantumState = { real0: 1, imag0: 0, real1: 0, imag1: 0 };
 let quantumTime = 0;
+
+observeElement('#unified-viz', () => {
+    // Don't auto-start quantum, let switchViz handle it
+}, 0.3);
 
 function initQuantum() {
     if (window.quantumAnimating) return;

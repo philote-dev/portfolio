@@ -1,19 +1,30 @@
-// ORIGINAL NEURAL NETWORK ANIMATION
+// ORIGINAL NEURAL NETWORK ANIMATION - BACKUP
 // This is the simpler version before 3D enhancements
+// To restore: copy this file to neural.js
+
+function observeElement(selector, callback, threshold = 0.2) {
+    const element = document.querySelector(selector);
+    if (!element) return;
+    const observer = new IntersectionObserver((entries) => {
+	entries.forEach(entry => {
+	    if (entry.isIntersecting) {
+		callback();
+		observer.unobserve(entry.target);
+	    }
+	});
+    }, { threshold });
+    observer.observe(element);
+}
 
 let neuralAnimating = false;
-
-function initNeural() {
+observeElement('#unified-viz', () => {
     if (neuralAnimating) return;
     neuralAnimating = true;
-    window.neuralAnimating = true;
-    
+    initNeural();
+}, 0.3);
+
+function initNeural() {
     const canvas = document.getElementById('neuralCanvas');
-    if (!canvas) {
-	neuralAnimating = false;
-	window.neuralAnimating = false;
-	return;
-    }
     const ctx = canvas.getContext('2d');
     
     const layers = [4, 6, 6, 4];

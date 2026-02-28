@@ -8,30 +8,29 @@ window.addEventListener('scroll', () => {
     const scrollPercentage = Math.min(scrollY / headerHeight, 1);
     const headerElement = document.querySelector('.header-content');
     
-    // Faster transition - starts immediately at 5% and completes by 35%
-    if (scrollPercentage < 0.05) {
-	// Show name
-	headerElement.style.opacity = 1;
-	headerElement.style.transform = `translateY(0) scale(1)`;
-	aboutContent.style.opacity = 0;
-	aboutContent.style.transform = `translate(-50%, -50%) translateY(20px)`;
-	aboutContent.classList.remove('active');
-	header.classList.remove('scrolled');
-    } 
-    else if (scrollPercentage >= 0.05 && scrollPercentage < 0.35) {
-	// Quick transition zone - completes by 35%
-	const transitionProgress = (scrollPercentage - 0.05) / 0.3;
+    // Fast transition - starts immediately at 0% and completes by 15%
+    if (scrollPercentage < 0.15) {
+	// Transition zone - starts immediately on scroll
+	const transitionProgress = Math.min(scrollPercentage / 0.15, 1);
 	headerElement.style.opacity = Math.max(0, 1 - transitionProgress);
-	headerElement.style.transform = `translateY(${-transitionProgress * 30}px) scale(${1 - transitionProgress * 0.3})`;
+	// Name moves up more to get out of the way (increased from 30px to 80px)
+	headerElement.style.transform = `translateY(${-transitionProgress * 80}px) scale(${1 - transitionProgress * 0.3})`;
 	aboutContent.style.opacity = transitionProgress;
 	aboutContent.style.transform = `translate(-50%, -50%) translateY(${20 - transitionProgress * 20}px)`;
-	aboutContent.classList.add('active');
-	header.classList.add('scrolled');
+	
+	if (transitionProgress > 0.1) {
+	    aboutContent.classList.add('active');
+	    header.classList.add('scrolled');
+	} else {
+	    aboutContent.classList.remove('active');
+	    header.classList.remove('scrolled');
+	}
     }
     else {
-	// Show about - fully transitioned by 35%
+	// Show about - fully transitioned by 15%
 	headerElement.style.opacity = 0;
-	headerElement.style.transform = `translateY(-30px) scale(0.7)`;
+	// Name fully moved up and out of the way
+	headerElement.style.transform = `translateY(-80px) scale(0.7)`;
 	aboutContent.style.opacity = 1;
 	aboutContent.style.transform = `translate(-50%, -50%) translateY(0)`;
 	aboutContent.classList.add('active');
@@ -70,20 +69,12 @@ document.addEventListener('keydown', (e) => {
 function toggleMoreProjects() {
     const hiddenProjects = document.querySelectorAll('.project-hidden');
     const showMoreBtn = document.getElementById('showMoreBtn');
-    const btnText = document.getElementById('btnText');
     
     hiddenProjects.forEach(project => {
 	project.classList.toggle('show');
     });
     
     showMoreBtn.classList.toggle('expanded');
-    
-    // Update button text
-    if (showMoreBtn.classList.contains('expanded')) {
-	btnText.textContent = 'Show Less';
-    } else {
-	btnText.textContent = 'Show More Projects';
-    }
 }
 
 // UNIFIED VISUALIZATION SWITCHING
@@ -120,6 +111,15 @@ function switchViz(direction) {
         window.gojoSetActive(true);
     }
     
+    // Initialize neural if switching to it and not already initialized
+    if (newVizType === 'neural' && typeof initNeural === 'function' && !window.neuralAnimating) {
+	setTimeout(() => {
+	    if (!window.neuralAnimating) {
+		initNeural();
+	    }
+	}, 100);
+    }
+    
     // Initialize quantum if switching to it and not already initialized
     if (newVizType === 'quantum' && typeof initQuantum === 'function' && !window.quantumAnimating) {
 	setTimeout(() => {
@@ -140,6 +140,36 @@ function switchViz(direction) {
 	}, 100);
     }
 }
+
+// Helper function to observe element visibility
+function observeElement(selector, callback, threshold = 0.2) {
+    const element = document.querySelector(selector);
+    if (!element) return;
+    const observer = new IntersectionObserver((entries) => {
+	entries.forEach(entry => {
+	    if (entry.isIntersecting) {
+		callback();
+		observer.unobserve(entry.target);
+	    }
+	});
+    }, { threshold });
+    observer.observe(element);
+}
+
+// Initialize first visualization when it comes into view
+observeElement('#unified-viz', () => {
+    const activeCanvas = document.querySelector('.viz-canvas.active');
+    if (activeCanvas) {
+	const vizType = activeCanvas.id.replace('Canvas', '');
+	if (vizType === 'neural' && typeof initNeural === 'function' && !window.neuralAnimating) {
+	    setTimeout(() => {
+		if (!window.neuralAnimating) {
+		    initNeural();
+		}
+	    }, 100);
+	}
+    }
+}, 0.3);
 
 // Keyboard navigation for visualizations
 document.addEventListener('keydown', (e) => {
