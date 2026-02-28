@@ -25,42 +25,83 @@
         </div>
         <div class="about-content" id="aboutContent">
             <h2>About Me</h2>
-            <p>I'm a Physics and Computer Science student at MIT passionate about research in the intersection between quantum computing and artificial intelligence. My past work spans from quantum circuit optimization at CSAIL to neurosymbolic AI at MuLIP Labs. I'm heavily involved with my community, where I used to compete in robotics at the World Championship level, founded Miami Vex Support to teach engineering to underrepresented communities, and mentor aspiring STEM students. Overall, I'm driven by creating tools/machines that bridge theoretical concepts with practical applications.</p>
+            <p>I'm a Physics and Computer Science student at MIT passionate about research in the intersection between quantum computing, blackbox theory, and artificial intelligence alignment. My past work spans from quantum circuit optimization at CSAIL to neurosymbolic AI at MuLIP Labs. I'm heavily involved with my community, where I used to compete in robotics at the World Championship level, founded Miami Vex Support to teach engineering to underrepresented communities, and mentor aspiring STEM students. Overall, I'm driven by creating tools/machines that bridge theoretical concepts with practical applications.</p>
         </div>
     </header>
 
-    <div class="fullscreen-viz" id="neural">
-        <canvas id="neuralCanvas"></canvas>
-        <div class="edu-card">
-            <h3>Information Flow</h3>
-            <p>Neurons activate based on proximity. Data propagates through layers via weighted connections.</p>
+    <div class="fullscreen-viz" id="unified-viz">
+        <!-- Neural Network Canvas -->
+        <canvas id="neuralCanvas" class="viz-canvas active"></canvas>
+        <!-- Quantum Canvas -->
+        <canvas id="quantumCanvas" class="viz-canvas"></canvas>
+        <!-- Gojo Techniques Canvas -->
+        <canvas id="gojoCanvas" class="viz-canvas"></canvas>
+        
+        <!-- Navigation Arrows -->
+        <button class="nav-arrow nav-arrow-left" onclick="switchViz(-1)" aria-label="Previous visualization">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 18l-6-6 6-6"/>
+            </svg>
+        </button>
+        <button class="nav-arrow nav-arrow-right" onclick="switchViz(1)" aria-label="Next visualization">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"/>
+            </svg>
+        </button>
+        
+        <!-- Neural Network Content -->
+        <div class="viz-panel active" data-viz="neural">
+            <div class="edu-card">
+                <h3>Information Flow</h3>
+                <p>Neurons activate based on proximity. Data propagates through layers via weighted connections.</p>
+            </div>
+            <div class="viz-content">
+                <div class="viz-subtitle">Interactive Visualization</div>
+                <h2 class="viz-title">Neural Network Dynamics</h2>
+                <p class="viz-description">Vizualize how data flows through the connected layers by hovering over nodes to activate neurons.</p>
+            </div>
         </div>
-        <div class="viz-content">
-            <div class="viz-subtitle">Interactive Visualization</div>
-            <h2 class="viz-title">Neural Network Dynamics</h2>
-            <p class="viz-description">Vizualize how data flows through the connected layers by hovering over nodes to activate neurons.</p>
+        
+        <!-- Quantum Content -->
+        <div class="viz-panel" data-viz="quantum">
+            <div class="edu-card">
+                <h3>Quantum Superposition</h3>
+                <p>States exist in superposition until measured. Apply unitary gates to rotate the state in Hilbert space.</p>
+            </div>
+            <div class="viz-content">
+                <div class="viz-subtitle">Quantum Computing</div>
+                <h2 class="viz-title">Bloch Sphere Simulator</h2>
+                <p class="viz-description">Explore quantum state evolution. Apply gates to manipulate superposition and observe probability amplitudes transform (state listed on the top-right).</p>
+            </div>
+            <div class="quantum-info" id="quantumInfo">
+                |ψ⟩ = 1.00|0⟩ + 0.00|1⟩
+            </div>
+            <div class="viz-controls">
+                <button class="btn" onclick="applyHadamard()">Hadamard</button>
+                <button class="btn" onclick="applyPauliX()">Pauli-X</button>
+                <button class="btn" onclick="applyPhase()">Phase</button>
+                <button class="btn" onclick="resetQuantum()">Reset</button>
+            </div>
         </div>
-    </div>
-
-    <div class="fullscreen-viz" id="quantum">
-        <canvas id="quantumCanvas"></canvas>
-        <div class="edu-card">
-            <h3>Quantum Superposition</h3>
-            <p>States exist in superposition until measured. Apply unitary gates to rotate the state in Hilbert space.</p>
-        </div>
-        <div class="viz-content">
-            <div class="viz-subtitle">Quantum Computing</div>
-            <h2 class="viz-title">Bloch Sphere Simulator</h2>
-            <p class="viz-description">Explore quantum state evolution. Apply gates to manipulate superposition and observe probability amplitudes transform (state listed on the top-right).</p>
-        </div>
-        <div class="quantum-info" id="quantumInfo">
-            |ψ⟩ = 1.00|0⟩ + 0.00|1⟩
-        </div>
-        <div class="viz-controls">
-            <button class="btn" onclick="applyHadamard()">Hadamard</button>
-            <button class="btn" onclick="applyPauliX()">Pauli-X</button>
-            <button class="btn" onclick="applyPhase()">Phase</button>
-            <button class="btn" onclick="resetQuantum()">Reset</button>
+        
+        <!-- Gojo Techniques Content -->
+        <div class="viz-panel" data-viz="gojo">
+            <div class="edu-card">
+                <h3>Limitless Technique</h3>
+                <p>Control over spatial and informational curvature. Modifies the metric tensor through which force propagates.</p>
+            </div>
+            <div class="viz-content">
+                <div class="viz-subtitle">Mathematical Visualization</div>
+                <h2 class="viz-title">Gojo's Cursed Techniques</h2>
+                <p class="viz-description">Visualizing the mathematical framework of Limitless: Infinity, Blue, Red, Purple, and Unlimited Void as operators on spatial manifolds.</p>
+            </div>
+            <div class="quantum-info" id="gojoTechniqueName" style="color: #00ffff;">
+                Limitless: Infinity
+            </div>
+            <div class="gojo-controls">
+                <button class="btn" onclick="switchGojoTechnique(-1)">← Previous</button>
+                <button class="btn" onclick="switchGojoTechnique(1)">Next →</button>
+            </div>
         </div>
     </div>
 
@@ -71,7 +112,111 @@
     <section class="projects-section" id="projects">
         <h2>Featured Projects</h2>
             <div class="projects-grid">
-                <div class="project-card" onclick="openModal('frcsim')">
+                <div class="project-card" onclick="openModal('iquhack')">
+                    <div class="project-image">
+                        <img src="images/projects/iquhack.png" alt="iQuHack 2026">
+                    </div>
+                    <div class="project-content">
+                        <h3>iQuHack 2026 — Quantum Rings Challenge</h3>
+                        <p>Quantum circuit difficulty and runtime prediction using static QASM features. Built 2-qubit interaction graphs and 
+                            compound structural metrics to model entanglement progression.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">PyTorch</span>
+                            <span class="tech-tag">Graph Analysis</span>
+                            <span class="tech-tag">QASM</span>
+                            <span class="tech-tag">Scikit-learn</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('novelgym')">
+                    <div class="project-image">
+                        <img src="images/projects/NovelGym Reg.png" alt="NovelGym Extension">
+                    </div>
+                    <div class="project-content">
+                        <h3>NovelGym HITL Extension</h3>
+                        <p>Extended NovelGym framework with Human-in-the-Loop feedback mechanisms for reinforcement learning agents. 
+                            Research conducted at MuLIP Labs, Tufts University (RSI 2024).</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">RL</span>
+                            <span class="tech-tag">PDDL</span>
+                            <span class="tech-tag">GridWorld</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('ri3d')">
+                    <div class="project-image">
+                        <img src="images/projects/ri3d.png" alt="FRCxMIT Ri3D">
+                    </div>
+                    <div class="project-content">
+                        <h3>FRCxMIT Ri3D 2026</h3>
+                        <p>72-hour rapid robotics prototyping challenge. Designed and programmed fully functional FIRST Robotics robot 
+                            with autonomous architecture, vision integration, and real-time control systems.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Java</span>
+                            <span class="tech-tag">WPILib</span>
+                            <span class="tech-tag">FRC Control Systems</span>
+                            <span class="tech-tag">Real-Time Robotics</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('mnic')">
+                    <div class="project-image">
+                        <img src="images/projects/mnic.png" alt="MNIC">
+                    </div>
+                    <div class="project-content">
+                        <h3>MNIC — AI Mnemonic Generator</h3>
+                        <p>AI-powered musical mnemonics generating structured melodies with vocals and harmony. End-to-end pipeline from 
+                            lyrics generation to audio synthesis using Claude API and Suno Bark TTS.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Claude Sonnet API</span>
+                            <span class="tech-tag">Suno Bark</span>
+                            <span class="tech-tag">librosa</span>
+                            <span class="tech-tag">Audio DSP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('sketch')">
+                    <div class="project-image">
+                        <img src="images/projects/Machining analyzer.png" alt="Sketch Visualizer">
+                    </div>
+                    <div class="project-content">
+                        <h3>AI Sketch Visualizer <span style="color: #ebcb8b; font-size: 0.75em;">[Active Development]</span></h3>
+                        <p>AI-driven engineering tool converting sketches to 3D models with manufacturability analysis. Uses CV for geometry 
+                            extraction and AI for feasibility assessment.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Computer Vision</span>
+                            <span class="tech-tag">LLMs</span>
+                            <span class="tech-tag">Mesh Processing</span>
+                            <span class="tech-tag">AI@MIT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('rubiks')">
+                    <div class="project-image">
+                        <img src="images/projects/Cube solver.png" alt="Rubik's Cube Solver">
+                    </div>
+                    <div class="project-content">
+                        <h3>Rubik's Cube Solver</h3>
+                        <p>Custom implementation of Kociemba's algorithm with optimized phase-state decomposition and pruning tables. 
+                            Features 3D-printed hardware achieving 21-41 second solve times.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Arduino</span>
+                            <span class="tech-tag">3D Printing</span>
+                            <span class="tech-tag">Algorithms</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card project-hidden" onclick="openModal('frcsim')">
                     <div class="project-image">
                         <img src="images/projects/frc vis sim.png" alt="FRC Simulations">
                     </div>
@@ -87,7 +232,7 @@
                     </div>
                 </div>
 
-                <div class="project-card" onclick="openModal('frcai')">
+                <div class="project-card project-hidden" onclick="openModal('frcai')">
                     <div class="project-image">
                         <img src="images/projects/frc btb.png" alt="FRC Vision AI">
                     </div>
@@ -105,7 +250,7 @@
                     </div>
                 </div>
 
-                <div class="project-card" onclick="openModal('mvs')">
+                <div class="project-card project-hidden" onclick="openModal('mvs')">
                     <div class="project-image">
                         <img src="images/projects/rengifo mvs.png" alt="Miami Vex Support">
                     </div>
@@ -121,57 +266,12 @@
                         </div>
                     </div>
                 </div>
-            
-                <div class="project-card" onclick="openModal('novelgym')">
-                    <div class="project-image">
-                        <img src="images/projects/NovelGym Reg.png" alt="NovelGym Extension">
-                    </div>
-                    <div class="project-content">
-                        <h3>NovelGym HITL Extension</h3>
-                        <p>Extended NovelGym framework with Human-in-the-Loop feedback mechanisms for reinforcement learning agents. 
-                            Research conducted at MuLIP Labs, Tufts University (RSI 2024).</p>
-                        <div class="tech-stack">
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">RL</span>
-                            <span class="tech-tag">PDDL</span>
-                            <span class="tech-tag">GridWorld</span>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="project-card" onclick="openModal('rubiks')">
-                    <div class="project-image">
-                        <img src="images/projects/Cube solver.png" alt="Rubik's Cube Solver">
-                    </div>
-                    <div class="project-content">
-                        <h3>Rubik's Cube Solver</h3>
-                        <p>Custom implementation of Kociemba's algorithm with optimized phase-state decomposition and pruning tables. 
-                            Features 3D-printed hardware achieving 21-41 second solve times.</p>
-                        <div class="tech-stack">
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">Arduino</span>
-                            <span class="tech-tag">3D Printing</span>
-                            <span class="tech-tag">Algorithms</span>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="project-card" onclick="openModal('sketch')">
-                    <div class="project-image">
-                        <img src="images/projects/Machining analyzer.png" alt="Sketch Visualizer">
-                    </div>
-                    <div class="project-content">
-                        <h3>AI Sketch Visualizer <span style="color: #ebcb8b; font-size: 0.75em;">[Active Development]</span></h3>
-                        <p>AI-driven engineering tool converting sketches to 3D models with manufacturability analysis. Uses CV for geometry 
-                            extraction and AI for feasibility assessment.</p>
-                        <div class="tech-stack">
-                            <span class="tech-tag">Computer Vision</span>
-                            <span class="tech-tag">LLMs</span>
-                            <span class="tech-tag">Mesh Processing</span>
-                            <span class="tech-tag">AI@MIT</span>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <div class="show-more-container">
+                <button class="show-more-btn" onclick="toggleMoreProjects()" id="showMoreBtn">
+                    <span class="plus-icon">+</span>
+                    <span class="btn-text" id="btnText">Show More Projects</span>
+                </button>
             </div>
     </section>
 
@@ -396,6 +496,121 @@
         </div>
     </div>
 
+    <div id="modal-iquhack" class="modal" onclick="closeModal(event, 'iquhack')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal(event, 'iquhack')">&times;</span>
+            <div class="modal-header">
+                <h2>iQuHack 2026 — Quantum Rings Challenge</h2>
+                <p class="modal-subtitle">Quantum Circuit Difficulty & Runtime Prediction</p>
+            </div>
+            <div class="modal-body">
+                <h3>Overview</h3>
+                <p>Team-based competition project at iQuHack (Winter 2026) working with Ethan Herman, Hazel Torek, Ryon Peddapalli, and Varun Sethi. The challenge required predicting minimum fidelity threshold and runtime of quantum circuits using static QASM-only features—no simulation-dependent features allowed. This constraint forced us to develop novel structural analysis techniques that could extract circuit difficulty from topology alone.</p>
+                
+                <h3>Key Components</h3>
+                <ul>
+                    <li><strong>QASM Static Feature Extraction Pipeline:</strong> Designed comprehensive feature extraction system analyzing circuit structure without execution</li>
+                    <li><strong>2-Qubit Interaction Graph:</strong> Built graph representation modeling entanglement structure and connectivity patterns</li>
+                    <li><strong>Structural Metrics:</strong> Derived max qubit degree, degree variance, two-qubit gate density, entanglement volume, and temporal packing metrics</li>
+                    <li><strong>Entanglement Progression Compound Metric:</strong> Introduced novel compound metric capturing how entanglement complexity evolves through circuit layers</li>
+                    <li><strong>Fidelity Curve Modeling:</strong> Modeled fidelity curve using logistic regression fitting, extracting phase-shift parameter representing intrinsic circuit difficulty</li>
+                    <li><strong>Multi-Stage Threshold Prediction:</strong> Built system combining linear regression baseline, random forest model, and feature-aware binning correction</li>
+                    <li><strong>Runtime Prediction Neural Network:</strong> Implemented PyTorch network with 12 feature input, Dense(128) → ReLU → Dense(64) → ReLU → Output log2(seconds) architecture</li>
+                </ul>
+                
+                <h3>Technical Implementation</h3>
+                <p>The core insight driving our approach was that circuit difficulty is multiplicative, not additive. Compound structural features significantly outperformed individual features. We validated our models across GHZ, QFT, Grover, and QAOA circuit families, demonstrating strong correlation between static features and both fidelity thresholds and runtime. The neural network regression model for runtime prediction operated on log2-transformed seconds to handle the wide dynamic range of execution times.</p>
+                
+                <div class="modal-video">
+                    <h3>Slide Deck</h3>
+                    <p style="text-align: center; padding: 2rem; color: #81a1c1;">Slide deck presentation coming soon</p>
+                </div>
+                
+                <h3>Impact</h3>
+                <p>Demonstrated reliable threshold prediction using purely static analysis features, improving generalizability without compilation-dependent metrics. This work shows that structural circuit analysis can provide meaningful predictions about quantum circuit behavior without expensive simulation, enabling faster circuit design iteration and resource allocation in quantum computing systems.</p>
+                
+                <div class="modal-links">
+                    <a href="#contact" class="modal-btn">Request Technical Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-mnic" class="modal" onclick="closeModal(event, 'mnic')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal(event, 'mnic')">&times;</span>
+            <div class="modal-header">
+                <h2>MNIC — AI Mnemonic Generator</h2>
+                <p class="modal-subtitle">AI-Powered Musical Mnemonics (AI@MIT Winter 2025)</p>
+            </div>
+            <div class="modal-body">
+                <h3>Overview</h3>
+                <p>Developed in collaboration with Ajibola Ajani and Angelo Farfan at AI@MIT (Winter 2025). The project addresses a fundamental learning challenge: students retain melodic information better than plain text, yet no unified tool exists to automatically generate structured musical mnemonics with vocals and harmony. MNIC bridges this gap with an end-to-end AI and DSP pipeline transforming structured knowledge into melody-driven memory reinforcement.</p>
+                
+                <h3>Key Components</h3>
+                <ul>
+                    <li><strong>Lyrics Generation:</strong> Claude Sonnet 4 API integration supporting rhythmic rhyme schemes (AABB, ABAB) and acrostic mnemonics, outputting mnemonic.txt with metadata JSON</li>
+                    <li><strong>Vocal Generation:</strong> Suno Bark TTS producing 24kHz WAV output with syllabic mapping and prompt conditioning for natural speech rhythm</li>
+                    <li><strong>Audio Feature Extraction:</strong> librosa-based pipeline using pyin() pitch detection, beat_track(), and chroma_cqt() for key and tempo extraction</li>
+                    <li><strong>Harmony Generation:</strong> I–IV–V–I chord progression generation using pretty_midi with FluidSynth rendering for musical accompaniment</li>
+                    <li><strong>Audio Stitching:</strong> Numpy-based mixing pipeline with Muspy integration, normalization, and 44.1kHz final output production</li>
+                </ul>
+                
+                <h3>Technical Implementation</h3>
+                <p>The pipeline processes input knowledge structures through sequential stages: first generating semantically appropriate lyrics with proper rhythmic structure, then synthesizing natural-sounding vocals, extracting musical features from the vocal track, generating harmonically compatible chord progressions, and finally mixing all components into a cohesive musical mnemonic. Performance averages 30–45 seconds per generation on Apple Silicon (M4), making it practical for real-time educational use.</p>
+                
+                <div class="modal-video">
+                    <h3>Slide Deck</h3>
+                    <p style="text-align: center; padding: 2rem; color: #81a1c1;">Slide deck presentation coming soon</p>
+                </div>
+                
+                <h3>Impact</h3>
+                <p>End-to-end AI + DSP pipeline transforming structured knowledge into melody-driven memory reinforcement. This system demonstrates how modern AI APIs can be integrated with traditional signal processing to create novel educational tools. The combination of natural language generation, text-to-speech synthesis, and musical composition in a single automated pipeline opens possibilities for personalized learning aids that leverage multiple cognitive pathways for information retention.</p>
+                
+                <div class="modal-links">
+                    <a href="#contact" class="modal-btn">Request Demo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-ri3d" class="modal" onclick="closeModal(event, 'ri3d')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal(event, 'ri3d')">&times;</span>
+            <div class="modal-header">
+                <h2>FRCxMIT Ri3D 2026</h2>
+                <p class="modal-subtitle">72-Hour Rapid Robotics Prototyping</p>
+            </div>
+            <div class="modal-body">
+                <h3>Overview</h3>
+                <p>Collaborated with FRCxMIT to design, build, and program a fully functional FIRST Robotics robot within 72 hours of game release. The Robot in 3 Days (Ri3D) challenge tests teams' ability to rapidly prototype, integrate, and deploy complex robotic systems under extreme time constraints. This project demanded architectural decisions that balanced functionality with speed of implementation, real-time debugging discipline, and modular design enabling parallel development.</p>
+                
+                <h3>Key Components</h3>
+                <ul>
+                    <li><strong>Rapid Autonomous Architecture:</strong> Designed autonomous system architecture optimized for quick deployment under extreme time constraints</li>
+                    <li><strong>Modular Java Command-Based Structure:</strong> Implemented WPILib command-based robot framework enabling parallel development and rapid iteration</li>
+                    <li><strong>Vision and Field-Relative Control:</strong> Integrated computer vision pipeline with field-relative positioning for accurate autonomous navigation</li>
+                    <li><strong>Drivetrain and Mechanism Control Loops:</strong> Tuned PID controllers and feedforward systems for precise motion control across multiple subsystems</li>
+                    <li><strong>Rapid Iteration Testing Pipeline:</strong> Established testing methodology enabling quick validation cycles without compromising system reliability</li>
+                </ul>
+                
+                <h3>Technical Implementation</h3>
+                <p>Built on Java with WPILib framework, focusing on speed of deployment, architectural cleanliness, and real-time debugging under competition conditions. The modular command-based structure allowed team members to work simultaneously on different subsystems while maintaining system integration. Vision integration required careful calibration and field-relative coordinate transformations to ensure autonomous path planning accuracy. Control loop tuning balanced responsiveness with stability, critical for reliable performance in competition scenarios.</p>
+                
+                <h3>Focus Areas</h3>
+                <p>The project emphasized speed of deployment, architectural cleanliness, and real-time debugging discipline. Every design decision prioritized rapid iteration—choosing proven patterns over experimental approaches, maintaining clear interfaces between subsystems, and establishing debugging workflows that could identify and resolve issues within minutes rather than hours.</p>
+                
+                <h3>Impact</h3>
+                <p>Demonstrated rapid system integration, real-time debugging discipline, and deployable autonomy under strict 72-hour constraints. This experience reinforced the importance of architectural decisions made early in development, the value of modular design for parallel work, and the critical role of disciplined testing practices when time is the primary constraint. The project showcases how robust engineering practices can be maintained even under extreme time pressure.</p>
+                
+                <div class="modal-links">
+                    <a href="https://github.com/Ri3D-MIT/2026_Robot_Code" target="_blank" class="modal-btn">GitHub Repository</a>
+                    <a href="#contact" class="modal-btn">Request Technical Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="section-divider">
         <div class="divider-line"></div>
     </div>
@@ -458,9 +673,11 @@
     </footer>
 
     <!Script loading>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="scripts/main.js"></script>
     <script src="scripts/neural.js"></script>
     <script src="scripts/quantum.js"></script>
+    <script src="scripts/gojo.js"></script>
 
 
 </body>

@@ -232,40 +232,160 @@ nav a:hover::after {
     border-bottom: 1px solid rgba(180, 142, 173, 0.2);
 }
 
-.fullscreen-viz canvas {
+.fullscreen-viz:hover .nav-arrow {
+    opacity: 1;
+}
+
+.viz-canvas {
     position: absolute !important;
     top: 0;
     left: 0;
     width: 100% !important;
     height: 100% !important;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.viz-canvas.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 15;
+}
+
+.viz-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease-in-out;
+    z-index: 20;
+}
+
+.viz-panel.active {
+    opacity: 1;
+    pointer-events: none;
+}
+
+.viz-panel.active .edu-card,
+.viz-panel.active .viz-content,
+.viz-panel.active .quantum-info,
+.viz-panel.active .viz-controls,
+.viz-panel.active .btn {
+    pointer-events: auto;
+}
+
+.viz-panel.active .viz-title {
+    opacity: 1 !important;
+    color: #88c0d0 !important;
+}
+
+.viz-panel.active .viz-subtitle {
+    opacity: 1 !important;
+    color: #81a1c1 !important;
+}
+
+.viz-panel.active .viz-description {
+    opacity: 1 !important;
+    color: #eceff4 !important;
+}
+
+.viz-panel.active .edu-card {
+    opacity: 1 !important;
+    background: rgba(46, 52, 64, 0.95) !important;
+}
+
+.viz-panel.active .edu-card h3 {
+    opacity: 1 !important;
+    color: #88c0d0 !important;
+}
+
+.viz-panel.active .edu-card p {
+    opacity: 1 !important;
+    color: #81a1c1 !important;
+}
+
+.viz-panel.active .quantum-info {
+    opacity: 1 !important;
+    color: #d8dee9 !important;
 }
 
 .viz-content {
     position: relative;
-    z-index: 10;
+    z-index: 20;
     max-width: 1000px;
     width: 100%;
     pointer-events: none;
 }
 
-/* QUANTUM SPECIFIC LAYOUT */
-#quantum {
-    display: block;
-    padding-top: 0;
+.viz-panel[data-viz="neural"] .viz-content {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+    width: 100%;
+    max-width: 1000px;
+    padding: 0 2rem;
 }
 
-#quantum canvas {
-    top: 0 !important;
-    height: 100% !important;
-    margin-top: 0;
-}
-
-#quantum .viz-content {
+.viz-panel[data-viz="quantum"] .viz-content,
+.viz-panel[data-viz="gojo"] .viz-content {
     position: absolute;
     top: 260px;
     left: 50%;
     transform: translateX(-50%);
     margin-top: 0;
+}
+
+/* Navigation Arrows */
+.nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(46, 52, 64, 0.85);
+    border: 1px solid rgba(136, 192, 208, 0.3);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    opacity: 0;
+    transition: all 0.3s ease;
+    color: #88c0d0;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.nav-arrow:hover {
+    background: rgba(67, 76, 94, 0.95);
+    border-color: rgba(136, 192, 208, 0.6);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(136, 192, 208, 0.4);
+}
+
+.nav-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.nav-arrow-left {
+    left: 20px;
+}
+
+.nav-arrow-right {
+    right: 20px;
+}
+
+.nav-arrow svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.5;
 }
 
 .viz-title {
@@ -343,6 +463,25 @@ nav a:hover::after {
     opacity: 0;
     animation: fadeInUp 0.8s ease-out 0.8s forwards;
     pointer-events: auto;
+}
+
+.gojo-controls {
+    position: absolute;
+    top: 140px;
+    right: 60px;
+    z-index: 20;
+    display: flex;
+    gap: 0.6rem;
+    flex-direction: column;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 0.8s forwards;
+    pointer-events: auto;
+}
+
+.gojo-controls .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    min-width: 120px;
 }
 
 .btn {
@@ -518,6 +657,60 @@ nav a:hover::after {
     transform: translateY(-8px);
     border-color: rgba(136, 192, 208, 0.4);
     box-shadow: 0 16px 40px rgba(136, 192, 208, 0.15);
+}
+
+.project-hidden {
+    display: none;
+}
+
+.project-hidden.show {
+    display: flex;
+    animation: scaleUp 0.8s ease-out;
+}
+
+.show-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+    padding: 2rem 0;
+}
+
+.show-more-btn {
+    background: linear-gradient(135deg, #3b4252, #434c5e);
+    border: 2px solid rgba(136, 192, 208, 0.3);
+    border-radius: 50px;
+    color: #88c0d0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 1rem 2.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.show-more-btn:hover {
+    background: linear-gradient(135deg, #434c5e, #4c566a);
+    border-color: rgba(136, 192, 208, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(136, 192, 208, 0.2);
+}
+
+.show-more-btn:active {
+    transform: translateY(-1px);
+}
+
+.plus-icon {
+    font-size: 1.5rem;
+    font-weight: 300;
+    transition: transform 0.3s ease;
+    line-height: 1;
+}
+
+.show-more-btn.expanded .plus-icon {
+    transform: rotate(45deg);
 }
 
 /* SKILLS */
@@ -868,13 +1061,26 @@ footer {
 	max-width: 200px;
     }
     
-    #quantum canvas { 
-	margin-top: 0;
-	height: 100% !important;
+    .viz-panel[data-viz="quantum"] .viz-content { 
+	top: 200px;
     }
     
-    #quantum .viz-content { 
-	top: 200px;
+    .nav-arrow {
+	width: 35px;
+	height: 35px;
+    }
+    
+    .nav-arrow-left {
+	left: 10px;
+    }
+    
+    .nav-arrow-right {
+	right: 10px;
+    }
+    
+    .nav-arrow svg {
+	width: 16px;
+	height: 16px;
     }
     
     .viz-controls {

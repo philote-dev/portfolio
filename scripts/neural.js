@@ -13,7 +13,7 @@ function observeElement(selector, callback, threshold = 0.2) {
 }
 
 let neuralAnimating = false;
-observeElement('#neural', () => {
+observeElement('#unified-viz', () => {
     if (neuralAnimating) return;
     neuralAnimating = true;
     initNeural();
