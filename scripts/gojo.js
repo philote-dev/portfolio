@@ -1143,7 +1143,7 @@ function updateTechnique(index) {
     // Update particle material and scene background
     if (particles && particles.material) {
         if (index === 4) {
-            // Void - smaller particles for fluid look, pure black background
+            // Void - smaller particles for fluid look, keep black for space effect
             particles.material.size = 0.1;
             scene.background = new THREE.Color(0x000000);
         } else {
@@ -1173,9 +1173,27 @@ function updateTechnique(index) {
     }
 }
 
-// Global function to switch techniques
+// Global function to switch techniques (skips Void - only accessible via infinity button)
 window.switchGojoTechnique = function(direction) {
     if (!gojoAnimating || !targetPositions) return;
-    currentTechnique = (currentTechnique + direction + techniques.length) % techniques.length;
+    
+    // Skip Void (index 4) when using arrows
+    let nextTechnique = currentTechnique;
+    const techniquesWithoutVoid = [0, 1, 2, 3, 5, 6]; // All techniques except Void (4)
+    
+    do {
+        nextTechnique = (nextTechnique + direction + techniques.length) % techniques.length;
+    } while (nextTechnique === 4); // Skip Void
+    
+    currentTechnique = nextTechnique;
     updateTechnique(currentTechnique);
+};
+
+// Activate Domain Expansion: Unlimited Void (switches to Void technique)
+window.activateDomainExpansion = function() {
+    if (!gojoAnimating || !targetPositions) return;
+    
+    // Switch to Void technique (index 4)
+    currentTechnique = 4;
+    updateTechnique(4);
 };
