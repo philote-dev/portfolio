@@ -4,6 +4,7 @@ let currentTechnique = 0; // 0: Neutral, 1: Blue, 2: Red, 3: Purple, 4: Void, 5:
 const techniques = ['neutral', 'blue', 'red', 'purple', 'void', 'blueSpiral', 'redDivergence'];
 let scene, camera, renderer, particles;
 let targetPositions, targetColors, targetSizes;
+let blackHoleSphere = null; // Black hole sphere for Void technique
 let voidTime = 0;
 let infinityTime = 0; // Time since Infinity was activated
 let infinityStartTime = 0; // When Infinity technique was first shown
@@ -77,6 +78,9 @@ function initGojo() {
     scene.background = new THREE.Color(0x000000); // Pure black space background
     camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
     camera.position.z = 55;
+    
+    // Black hole sphere (for Void technique)
+    let blackHoleSphere = null;
 
     renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
     renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
@@ -137,6 +141,97 @@ function initGojo() {
     function animate() {
         requestAnimationFrame(animate);
 
+        // Handle Domain Expansion animation
+        if (domainExpansionActive) {
+            const now = Date.now();
+            domainExpansionTime = (now - domainExpansionStartTime) / 1000;
+            
+            const overlay = document.getElementById('domainExpansionOverlay');
+            if (overlay) {
+                if (domainExpansionExpanding) {
+                    // Expanding: void blob grows from center
+                    const progress = Math.min(1, domainExpansionTime / DOMAIN_EXPANSION_DURATION);
+                    // Use easing for smoother expansion (ease-out)
+                    const easedProgress = 1 - Math.pow(1 - progress, 2.5);
+                    
+                    // Calculate max radius to cover entire viewport
+                    const maxRadius = Math.sqrt(window.innerWidth ** 2 + window.innerHeight ** 2) / 2;
+                    const currentRadius = maxRadius * easedProgress;
+                    
+                    // Get center coordinates from overlay data attribute or calculate
+                    const centerX = overlay.dataset.centerX || window.innerWidth / 2;
+                    const centerY = overlay.dataset.centerY || window.innerHeight / 2;
+                    
+                    // Update gradient - void blob expanding from viewport center to edges
+                    overlay.style.background = `radial-gradient(circle at ${centerX}px ${centerY}px, 
+                        transparent 0%, 
+                        transparent ${Math.max(0, currentRadius - 50)}px, 
+                        rgba(0, 0, 0, 0.4) ${Math.max(0, currentRadius - 30)}px, 
+                        rgba(0, 0, 0, 0.7) ${Math.max(0, currentRadius - 15)}px, 
+                        rgba(0, 0, 0, 0.9) ${Math.max(0, currentRadius - 5)}px, 
+                        #000000 ${currentRadius}px, 
+                        #000000 100%)`;
+                    overlay.style.opacity = Math.min(1, easedProgress);
+                    
+                    if (progress >= 1) {
+                        // Fully expanded - immediately switch to Void technique (no delay)
+                        overlay.style.background = '#000000';
+                        overlay.style.opacity = 1;
+                        
+                        // Switch to Void technique immediately for seamless transition
+                        if (currentTechnique !== 4) {
+                            currentTechnique = 4;
+                            updateTechnique(4);
+                            if (scene) {
+                                scene.background = new THREE.Color(0x000000);
+                            }
+                            // Reset void time for fresh animation
+                            voidTime = 0;
+                        }
+                        
+                        // Immediately remove overlay to reveal Void animation (no fade delay)
+                        if (overlay && overlay.parentNode) {
+                            overlay.parentNode.removeChild(overlay);
+                        }
+                        domainExpansionActive = false;
+                    }
+                } else {
+                    // Contracting: reverse the animation
+                    const progress = Math.min(1, domainExpansionTime / DOMAIN_EXPANSION_DURATION);
+                    const easedProgress = 1 - Math.pow(1 - progress, 2.5);
+                    const reverseProgress = 1 - easedProgress;
+                    
+                    if (reverseProgress <= 0) {
+                        // Fully contracted - remove overlay
+                        overlay.style.opacity = 0;
+                        setTimeout(() => {
+                            if (overlay && overlay.parentNode) {
+                                overlay.parentNode.removeChild(overlay);
+                            }
+                        }, 100);
+                        domainExpansionActive = false;
+                        domainExpansionExpanding = true;
+                    } else {
+                        // Contracting animation
+                        const maxRadius = Math.sqrt(window.innerWidth ** 2 + window.innerHeight ** 2) / 2;
+                        const currentRadius = maxRadius * reverseProgress;
+                        const centerX = overlay.dataset.centerX || window.innerWidth / 2;
+                        const centerY = overlay.dataset.centerY || window.innerHeight / 2;
+                        
+                        overlay.style.background = `radial-gradient(circle at ${centerX}px ${centerY}px, 
+                            transparent 0%, 
+                            transparent ${Math.max(0, currentRadius - 50)}px, 
+                            rgba(0, 0, 0, 0.4) ${Math.max(0, currentRadius - 30)}px, 
+                            rgba(0, 0, 0, 0.7) ${Math.max(0, currentRadius - 15)}px, 
+                            rgba(0, 0, 0, 0.9) ${Math.max(0, currentRadius - 5)}px, 
+                            #000000 ${currentRadius}px, 
+                            #000000 100%)`;
+                        overlay.style.opacity = reverseProgress;
+                    }
+                }
+            }
+        }
+
         // Only animate once Gojo is the active unified viz panel
         if (!gojoIsActive) return;
 
@@ -152,109 +247,66 @@ function initGojo() {
         const siz = particles.geometry.attributes.size.array;
 
         if (currentTechnique === 4) {
-            // Unlimited Void - special handling for fluid black hole
+            // Unlimited Void - Black sphere with white particles orbiting around circumference
             voidTime += 0.016; // ~60fps timing
             
-            // Update Void particles with fluid dynamics
+            const blackHoleRadius = 10;
+            const particleRingRadius = blackHoleRadius + 0.5; // Just outside the sphere surface
+            const ringThickness = 2.5; // A few particles thick in radius
+            
+            // Create white particles orbiting around the sphere's circumference
             for (let i = 0; i < COUNT; i++) {
                 const idx = i * 3;
                 
-                // Determine particle type based on index ranges
-                if (i < COUNT * 0.02) {
-                    // Event horizon - pure black void (minimal particles)
-                    const r = Math.random() * 6;
-                    const theta = Math.random() * Math.PI * 2;
-                    const phi = Math.acos(2 * Math.random() - 1);
-                    targetPositions[idx] = r * Math.sin(phi) * Math.cos(theta);
-                    targetPositions[idx + 1] = r * Math.sin(phi) * Math.sin(theta);
-                    targetPositions[idx + 2] = r * Math.cos(phi);
-                    targetColors[idx] = 0;
-                    targetColors[idx + 1] = 0;
-                    targetColors[idx + 2] = 0;
-                    targetSizes[i] = 0.05;
-                } else if (i < COUNT * 0.35) {
-                    // Accretion disk - fluid swirling plasma
-                    const diskIndex = i - COUNT * 0.02;
-                    const totalDisk = COUNT * 0.33;
-                    const t = diskIndex / totalDisk; // 0 to 1
-                    
-                    // Radius increases from inner to outer
-                    const baseRadius = 6 + t * 25;
-                    const radiusVariation = Math.sin(t * 8 + voidTime * 2) * 2;
-                    const radius = baseRadius + radiusVariation;
-                    
-                    // Orbital angle with differential rotation (faster near center)
-                    const orbitalSpeed = (1.0 / Math.max(radius, 8)) * 0.8;
-                    const baseAngle = (diskIndex / 200) * Math.PI * 2; // Distribute around circle
-                    const angle = baseAngle + voidTime * orbitalSpeed;
-                    
-                    // Height variation for 3D disk
-                    const height = Math.sin(angle * 2 + voidTime) * (1 - t) * 3;
-                    
-                    targetPositions[idx] = radius * Math.cos(angle);
-                    targetPositions[idx + 1] = height;
-                    targetPositions[idx + 2] = radius * Math.sin(angle);
-                    
-                    // Color gradient: white/blue inner -> yellow/green middle -> blue outer
-                    if (t < 0.3) {
-                        // Inner: bright white-blue
-                        const brightness = 1.0 - t * 0.5;
-                        targetColors[idx] = brightness * 0.8;
-                        targetColors[idx + 1] = brightness * 0.9;
-                        targetColors[idx + 2] = brightness * 1.0;
-                        targetSizes[i] = 0.4 * brightness;
-                    } else if (t < 0.6) {
-                        // Middle: yellow-green transition
-                        const localT = (t - 0.3) / 0.3;
-                        targetColors[idx] = 0.8 - localT * 0.3;
-                        targetColors[idx + 1] = 0.7 - localT * 0.2;
-                        targetColors[idx + 2] = 0.5 - localT * 0.3;
-                        targetSizes[i] = 0.3;
-                    } else {
-                        // Outer: deep blue
-                        targetColors[idx] = 0.2;
-                        targetColors[idx + 1] = 0.3;
-                        targetColors[idx + 2] = 0.6;
-                        targetSizes[i] = 0.2;
-                    }
-                } else {
-                    // Deep space stars - sparse, twinkling
-                    const starIndex = i - COUNT * 0.35;
-                    if (starIndex % 3 === 0) { // Only show 1/3 as stars for sparsity
-                        const r = 50 + Math.random() * 150;
-                        const theta = Math.random() * Math.PI * 2;
-                        const phi = Math.acos(2 * Math.random() - 1);
-                        const twinkle = 0.5 + Math.sin(voidTime * 2 + starIndex) * 0.5;
-                        
-                        targetPositions[idx] = r * Math.sin(phi) * Math.cos(theta);
-                        targetPositions[idx + 1] = r * Math.sin(phi) * Math.sin(theta);
-                        targetPositions[idx + 2] = r * Math.cos(phi);
-                        targetColors[idx] = twinkle * 0.9;
-                        targetColors[idx + 1] = twinkle * 0.9;
-                        targetColors[idx + 2] = twinkle * 1.0;
-                        targetSizes[i] = twinkle * 0.15;
-                    } else {
-                        // Hide other particles
-                        targetPositions[idx] = 0;
-                        targetPositions[idx + 1] = 0;
-                        targetPositions[idx + 2] = 0;
-                        targetColors[idx] = 0;
-                        targetColors[idx + 1] = 0;
-                        targetColors[idx + 2] = 0;
-                        targetSizes[i] = 0;
-                    }
-                }
+                // Distribute particles in rings around the sphere
+                const ringId = Math.floor(i / (COUNT / 5)); // 5 rings for thickness
+                const particleInRing = i % (COUNT / 5);
+                const particlesPerRing = COUNT / 5;
+                
+                // Radius varies slightly for thickness (multiple layers)
+                const radius = particleRingRadius + (ringId / 5) * ringThickness;
+                
+                // Orbital angle around the sphere (distribute particles around circumference)
+                const baseAngle = (particleInRing / particlesPerRing) * Math.PI * 2;
+                
+                // Rotation speed - particles spin around the sphere
+                const orbitalSpeed = 0.4; // Speed of rotation
+                const angle = baseAngle + voidTime * orbitalSpeed;
+                
+                // Vertical angle (around the sphere's equator)
+                const verticalId = Math.floor(particleInRing / (particlesPerRing / 8));
+                const verticalAngle = (verticalId / 8) * Math.PI * 2;
+                
+                // Position particles on the sphere's surface (circumference)
+                // Using spherical coordinates to place them around the sphere
+                const x = radius * Math.cos(angle) * Math.cos(verticalAngle * 0.3);
+                const y = radius * Math.sin(verticalAngle * 0.3);
+                const z = radius * Math.sin(angle) * Math.cos(verticalAngle * 0.3);
+                
+                targetPositions[idx] = x;
+                targetPositions[idx + 1] = y;
+                targetPositions[idx + 2] = z;
+                
+                // White color for particles
+                targetColors[idx] = 1.0; // Bright white
+                targetColors[idx + 1] = 1.0;
+                targetColors[idx + 2] = 1.0;
+                
+                // Size: consistent white particles
+                targetSizes[i] = 0.3;
             }
             
             // Smooth interpolation for fluid motion
             for (let i = 0; i < COUNT * 3; i++) {
-                pos[i] += (targetPositions[i] - pos[i]) * 0.15;
-                col[i] += (targetColors[i] - col[i]) * 0.15;
+                pos[i] += (targetPositions[i] - pos[i]) * 0.2;
+                col[i] += (targetColors[i] - col[i]) * 0.2;
             }
             for (let i = 0; i < COUNT; i++) {
-                siz[i] += (targetSizes[i] - siz[i]) * 0.15;
+                siz[i] += (targetSizes[i] - siz[i]) * 0.2;
             }
             
+            // Static viewpoint - camera always looks at black hole
+            camera.lookAt(0, 0, 0);
             particles.rotation.set(0, 0, 0);
         } else if (currentTechnique === 0) {
             // Infinity - particles spawn from infinity and approach, slowing at sphere boundary
@@ -1143,10 +1195,31 @@ function updateTechnique(index) {
     // Update particle material and scene background
     if (particles && particles.material) {
         if (index === 4) {
-            // Void - smaller particles for fluid look, keep black for space effect
-            particles.material.size = 0.1;
+            // Void - pure black environment with black sphere and white orbiting particles
+            particles.material.size = 0.3; // Show white particles
             scene.background = new THREE.Color(0x000000);
+            
+            // Create black hole sphere if it doesn't exist
+            if (!blackHoleSphere) {
+                const sphereGeometry = new THREE.SphereGeometry(10, 32, 32);
+                const sphereMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x000000,
+                    side: THREE.DoubleSide
+                });
+                blackHoleSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+                blackHoleSphere.position.set(0, 0, 0);
+                scene.add(blackHoleSphere);
+            }
+            
+            // Ensure camera is looking at the black hole (static viewpoint)
+            camera.lookAt(0, 0, 0);
         } else {
+            // Remove black hole sphere for other techniques
+            if (blackHoleSphere) {
+                scene.remove(blackHoleSphere);
+                blackHoleSphere = null;
+            }
+            
             const sizes = [0.15, 0.2, 0.2, 0.25, 0.1, 0.3, 0.35];
             particles.material.size = sizes[index];
             scene.background = null; // Transparent for other techniques
@@ -1189,11 +1262,57 @@ window.switchGojoTechnique = function(direction) {
     updateTechnique(currentTechnique);
 };
 
-// Activate Domain Expansion: Unlimited Void (switches to Void technique)
+// Domain Expansion animation state
+let domainExpansionActive = false;
+let domainExpansionTime = 0;
+let domainExpansionStartTime = 0;
+let domainExpansionExpanding = true;
+const DOMAIN_EXPANSION_DURATION = 2.0; // Time to expand and cover the panel
+
+// Activate Domain Expansion: Unlimited Void (with expansion animation)
 window.activateDomainExpansion = function() {
     if (!gojoAnimating || !targetPositions) return;
     
-    // Switch to Void technique (index 4)
-    currentTechnique = 4;
-    updateTechnique(4);
+    const existingOverlay = document.getElementById('domainExpansionOverlay');
+    
+    if (domainExpansionActive && existingOverlay) {
+        // If already active, deactivate (reverse animation)
+        domainExpansionExpanding = false;
+        domainExpansionStartTime = Date.now() - (DOMAIN_EXPANSION_DURATION - domainExpansionTime) * 1000;
+    } else {
+        // Start expansion animation
+        domainExpansionActive = true;
+        domainExpansionExpanding = true;
+        domainExpansionTime = 0;
+        domainExpansionStartTime = Date.now();
+        
+        // Remove existing overlay if present
+        if (existingOverlay) {
+            existingOverlay.remove();
+        }
+        
+        // Create overlay that covers the entire page
+        const overlay = document.createElement('div');
+        overlay.id = 'domainExpansionOverlay';
+        
+        // Get the center of the viewport
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at ${centerX}px ${centerY}px, transparent 0%, transparent 0%, #000000 0%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 15;
+        `;
+        // Store center coordinates for animation
+        overlay.dataset.centerX = centerX;
+        overlay.dataset.centerY = centerY;
+        document.body.appendChild(overlay);
+    }
 };

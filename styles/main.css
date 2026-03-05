@@ -465,7 +465,7 @@ nav a:hover::after {
 .gojo-controls {
     position: absolute;
     top: 140px;
-    right: 60px;
+    right: 80px;
     z-index: 10000;
     display: flex;
     gap: 0.8rem;
