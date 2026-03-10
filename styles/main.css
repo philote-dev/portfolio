@@ -504,6 +504,280 @@ nav a:hover::after {
     margin-left: 0.5rem;
 }
 
+.gojo-heart-btn {
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+    font-weight: bold;
+}
+
+/* Valentine's Page Styles */
+.valentine-letters {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 2rem;
+    z-index: 10001;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease-in-out;
+}
+
+.viz-panel[data-viz="valentine"].active .valentine-letters {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.letter-container {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.letter-container:hover {
+    transform: scale(1.2);
+}
+
+.letter {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #c8a2c8; /* Lilac color */
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.word {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem;
+    color: #c8a2c8;
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    margin-top: 0.5rem;
+}
+
+.letter-container.expanded .word {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.letter-container.expanded .letter {
+    transform: scale(1.3);
+    color: #d4a5d4;
+}
+
+/* Valentine's Header */
+.valentine-header {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10001;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.viz-panel[data-viz="valentine"].active .valentine-header {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.valentine-header-box {
+    background: linear-gradient(135deg, rgba(200, 162, 200, 0.9), rgba(180, 142, 173, 0.9));
+    border: 2px solid rgba(200, 162, 200, 0.5);
+    border-radius: 12px;
+    padding: 1rem 3rem;
+    color: #2e3440;
+    font-size: 1.8rem;
+    font-weight: 600;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(200, 162, 200, 0.3);
+    backdrop-filter: blur(10px);
+    white-space: nowrap;
+}
+
+/* Valentine Word Text */
+.valentine-word-text {
+    position: absolute;
+    color: #c8a2c8;
+    font-size: 1.8rem;
+    font-weight: 600;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background: rgba(46, 52, 64, 0.85);
+    border: 2px solid rgba(200, 162, 200, 0.5);
+    border-radius: 8px;
+    padding: 0.8rem 2rem;
+    box-shadow: 0 4px 15px rgba(200, 162, 200, 0.3);
+    backdrop-filter: blur(10px);
+    z-index: 10001;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+/* Valentine Expand Button */
+.valentine-expand-btn {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, rgba(200, 162, 200, 0.9), rgba(180, 142, 173, 0.9));
+    border: 2px solid rgba(200, 162, 200, 0.5);
+    border-radius: 50px;
+    padding: 0.8rem 2rem;
+    color: #2e3440;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: 'Arial', sans-serif;
+    cursor: pointer;
+    z-index: 10002;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(200, 162, 200, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.viz-panel[data-viz="valentine"].active .valentine-expand-btn {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.valentine-expand-btn:hover {
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 6px 25px rgba(200, 162, 200, 0.5);
+}
+
+.valentine-expand-btn {
+    white-space: nowrap;
+}
+
+/* Valentine Letter Buttons */
+.valentine-letter-buttons {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1rem;
+    z-index: 10002;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.viz-panel[data-viz="valentine"].active .valentine-letter-buttons {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.valentine-letter-btn {
+    background: rgba(200, 162, 200, 0.8);
+    border: 2px solid rgba(200, 162, 200, 0.5);
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    color: #2e3440;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Arial', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.valentine-letter-btn:hover {
+    background: rgba(200, 162, 200, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(200, 162, 200, 0.4);
+}
+
+/* Valentine Zoom View */
+.valentine-zoom-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10003;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(30, 34, 48, 0.95);
+    backdrop-filter: blur(20px);
+}
+
+.valentine-zoom-view.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.valentine-zoom-word {
+    font-size: 6rem;
+    font-weight: 700;
+    color: #c8a2c8;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    text-shadow: 0 0 30px rgba(200, 162, 200, 0.5);
+    margin-bottom: 3rem;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.6s ease;
+}
+
+.valentine-zoom-view.active .valentine-zoom-word {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.valentine-back-arrow {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(200, 162, 200, 0.6);
+    border: 2px solid rgba(200, 162, 200, 0.4);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    color: #2e3440;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(200, 162, 200, 0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.valentine-zoom-view.active .valentine-back-arrow {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.6s ease 0.3s;
+}
+
+.valentine-back-arrow:hover {
+    background: rgba(200, 162, 200, 0.8);
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 4px 15px rgba(200, 162, 200, 0.4);
+}
+
 .btn {
     background: linear-gradient(135deg, #88c0d0, #81a1c1);
     color: #2e3440;

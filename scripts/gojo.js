@@ -251,49 +251,52 @@ function initGojo() {
             voidTime += 0.016; // ~60fps timing
             
             const blackHoleRadius = 10;
-            const particleRingRadius = blackHoleRadius + 0.5; // Just outside the sphere surface
-            const ringThickness = 2.5; // A few particles thick in radius
+            const innerRadius = blackHoleRadius + 0.8; // Inner edge of particle stream
+            const outerRadius = blackHoleRadius + 5.0; // Outer edge of particle stream (larger spread)
+            const orbitalSpeed = 0.6; // Speed of rotation
             
-            // Create white particles orbiting around the sphere's circumference
+            // Create dense gradient stream of white particles flowing continuously around the full circle
+            // More particles at inner radius, fewer at outer radius (density gradient)
             for (let i = 0; i < COUNT; i++) {
                 const idx = i * 3;
                 
-                // Distribute particles in rings around the sphere
-                const ringId = Math.floor(i / (COUNT / 5)); // 5 rings for thickness
-                const particleInRing = i % (COUNT / 5);
-                const particlesPerRing = COUNT / 5;
+                // Use particle index to create smooth gradient distribution
+                // Each particle gets a unique position with slight variations
+                const normalizedIndex = i / COUNT;
                 
-                // Radius varies slightly for thickness (multiple layers)
-                const radius = particleRingRadius + (ringId / 5) * ringThickness;
+                // Distribute particles with higher density at inner radius
+                // Use a square root distribution to create density gradient (more particles inside)
+                const densityFactor = Math.sqrt(normalizedIndex); // More particles at lower values
+                const radius = innerRadius + (outerRadius - innerRadius) * densityFactor;
                 
-                // Orbital angle around the sphere (distribute particles around circumference)
-                const baseAngle = (particleInRing / particlesPerRing) * Math.PI * 2;
+                // Add slight radius variation for organic flow
+                const radiusVariation = Math.sin(normalizedIndex * Math.PI * 4 + voidTime * 0.3) * 0.15;
+                const finalRadius = radius + radiusVariation;
                 
-                // Rotation speed - particles spin around the sphere
-                const orbitalSpeed = 0.4; // Speed of rotation
-                const angle = baseAngle + voidTime * orbitalSpeed;
+                // Densely pack particles around the full circle
+                // Each particle is evenly spaced, creating a continuous stream
+                const baseAngle = normalizedIndex * Math.PI * 2;
+                // Add slight angular variation for organic flow
+                const angleVariation = Math.sin(normalizedIndex * Math.PI * 6 + voidTime * 0.4) * 0.08;
+                const angle = baseAngle + voidTime * orbitalSpeed + angleVariation;
                 
-                // Vertical angle (around the sphere's equator)
-                const verticalId = Math.floor(particleInRing / (particlesPerRing / 8));
-                const verticalAngle = (verticalId / 8) * Math.PI * 2;
+                // Simple circular ring in XY plane (perpendicular to camera view)
+                // Z varies smoothly in a gradient for depth
+                const zVariation = (Math.cos(normalizedIndex * Math.PI * 3 + voidTime * 0.2) * 0.5 + 0.5) * 0.8 - 0.4;
                 
-                // Position particles on the sphere's surface (circumference)
-                // Using spherical coordinates to place them around the sphere
-                const x = radius * Math.cos(angle) * Math.cos(verticalAngle * 0.3);
-                const y = radius * Math.sin(verticalAngle * 0.3);
-                const z = radius * Math.sin(angle) * Math.cos(verticalAngle * 0.3);
+                targetPositions[idx] = finalRadius * Math.cos(angle); // Horizontal circle
+                targetPositions[idx + 1] = finalRadius * Math.sin(angle); // Vertical circle
+                targetPositions[idx + 2] = zVariation; // Smooth depth variation
                 
-                targetPositions[idx] = x;
-                targetPositions[idx + 1] = y;
-                targetPositions[idx + 2] = z;
+                // White color for particles, slight brightness variation
+                // Outer particles slightly dimmer to emphasize density gradient
+                const brightness = 0.85 + Math.sin(normalizedIndex * Math.PI * 8) * 0.15 - (normalizedIndex * 0.1);
+                targetColors[idx] = brightness; // Bright white
+                targetColors[idx + 1] = brightness;
+                targetColors[idx + 2] = brightness;
                 
-                // White color for particles
-                targetColors[idx] = 1.0; // Bright white
-                targetColors[idx + 1] = 1.0;
-                targetColors[idx + 2] = 1.0;
-                
-                // Size: consistent white particles
-                targetSizes[i] = 0.3;
+                // Size: slight variation for more organic look
+                targetSizes[i] = 0.35 + Math.sin(normalizedIndex * Math.PI * 5) * 0.1;
             }
             
             // Smooth interpolation for fluid motion

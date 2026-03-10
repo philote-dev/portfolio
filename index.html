@@ -35,6 +35,8 @@
         <canvas id="quantumCanvas" class="viz-canvas"></canvas>
         <!-- Gojo Techniques Canvas -->
         <canvas id="gojoCanvas" class="viz-canvas"></canvas>
+        <!-- Valentine's Canvas -->
+        <canvas id="valentineCanvas" class="viz-canvas"></canvas>
         
         <!-- Navigation Arrows -->
         <button class="nav-arrow nav-arrow-left" onclick="switchViz(-1)" aria-label="Previous visualization">
@@ -109,6 +111,26 @@
                 <button class="gojo-arrow" onclick="switchGojoTechnique(-1)">‹</button>
                 <button class="gojo-arrow" onclick="switchGojoTechnique(1)">›</button>
                 <button class="gojo-arrow gojo-infinity-btn" onclick="activateDomainExpansion()" title="Domain Expansion: Unlimited Void">∞</button>
+                <button class="gojo-arrow gojo-heart-btn" onclick="activateValentine()" title="💜">·</button>
+            </div>
+        </div>
+        
+        <!-- Valentine's Content -->
+        <div class="viz-panel" data-viz="valentine">
+            <div class="valentine-header" id="valentineHeader">
+                <div class="valentine-header-box">
+                    Happy Valentine's Day!
+                </div>
+            </div>
+            <div class="valentine-expand-btn" id="valentineExpandBtn" onclick="handleValentineExpand()">
+                Click me to see what I like about you :)
+            </div>
+            <div class="valentine-letter-buttons" id="valentineLetterButtons">
+                <!-- Buttons will be added dynamically -->
+            </div>
+            <div class="valentine-zoom-view" id="valentineZoomView">
+                <div class="valentine-zoom-word" id="valentineZoomWord"></div>
+                <button class="valentine-back-arrow" onclick="exitZoom()" title="Back">↓</button>
             </div>
         </div>
     </div>
@@ -656,7 +678,7 @@
     <script src="scripts/neural.js"></script>
     <script src="scripts/quantum.js"></script>
     <script src="scripts/gojo.js"></script>
-
+    <script src="scripts/valentine.js"></script>
 
 </body>
 </html>
